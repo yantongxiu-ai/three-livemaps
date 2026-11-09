@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三张活地图 · 智能产品与交互</title>
+<style>
+  :root{
+    --bg:#fbfbfa; --surface:#ffffff; --surface-2:#f5f4f0;
+    --text:#2c2c2a; --text-2:#5f5e5a; --text-3:#888780;
+    --border:#e6e4de; --border-2:#d3d1c7;
+    --radius:12px; --radius-s:8px;
+    --domain:#185FA5; --domain-bg:#E6F1FB;
+    --eco:#0F6E56; --eco-bg:#E1F5EE;
+    --cog:#854F0B; --cog-bg:#FAEEDA;
+    --ok:#0F6E56; --ok-bg:#E1F5EE;
+    --warn:#854F0B; --warn-bg:#FAEEDA;
+    --info:#185FA5; --info-bg:#E6F1FB;
+    --neutral:#5f5e5a; --neutral-bg:#F1EFE8;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    font-size:15px; line-height:1.7;
+  }
+  a{color:var(--info);}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+  /* 顶部 */
+  .topbar{
+    position:sticky; top:0; z-index:50;
+    background:var(--surface); border-bottom:0.5px solid var(--border);
+  }
+  .topbar-inner{
+    max-width:1080px; margin:0 auto; padding:12px 20px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
+  }
+  .brand{font-weight:600; font-size:16px; white-space:nowrap;}
+  .brand small{display:block; font-weight:400; font-size:12px; color:var(--text-3);}
+  nav{display:flex; gap:4px; flex-wrap:wrap;}
+  nav button{
+    font:inherit; font-size:14px; color:var(--text-2);
+    background:transparent; border:0.5px solid transparent; border-radius:var(--radius-s);
+    padding:7px 12px; cursor:pointer;
+  }
+  nav button:hover{background:var(--surface-2); color:var(--text);}
+  nav button[aria-current="true"]{background:var(--surface-2); color:var(--text); border-color:var(--border-2); font-weight:500;}
+
+  main{max-width:1080px; margin:0 auto; padding:28px 20px 72px;}
+  .view{display:none;}
+  .view.active{display:block;}
+
+  h1{font-size:22px; font-weight:600; margin:0 0 8px;}
+  h2{font-size:18px; font-weight:600; margin:28px 0 8px;}
+  h3{font-size:15px; font-weight:600; margin:20px 0 6px;}
+  .lead{color:var(--text-2); margin:0 0 8px; max-width:720px;}
+  .muted{color:var(--text-3); font-size:13px;}
+
+  /* 卡片网格 */
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; margin-top:12px;}
+  .card{
+    background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius);
+    padding:16px 18px; cursor:pointer; text-align:left; width:100%;
+    font:inherit; color:var(--text);
+    transition:border-color .15s ease;
+  }
+  .card:hover{border-color:var(--border-2);}
+  .card:focus-visible{outline:2px solid var(--info); outline-offset:2px;}
+  .card .cat{display:inline-block; font-size:12px; padding:2px 8px; border-radius:999px; margin-bottom:10px;}
+  .card .name{font-weight:600; font-size:15px; margin:0 0 4px;}
+  .card .brief{font-size:13px; color:var(--text-2); margin:0 0 12px;}
+  .card .foot{display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;}
+  .card .open{font-size:13px; color:var(--info);}
+
+  /* 分类色 */
+  .c-domain{color:var(--domain); background:var(--domain-bg);}
+  .c-eco{color:var(--eco); background:var(--eco-bg);}
+  .c-cog{color:var(--cog); background:var(--cog-bg);}
+
+  /* 状态徽标 */
+  .badge{display:inline-block; font-size:12px; padding:2px 8px; border-radius:999px; line-height:1.5; white-space:nowrap;}
+  .b-ok{color:var(--ok); background:var(--ok-bg);}
+  .b-warn{color:var(--warn); background:var(--warn-bg);}
+  .b-info{color:var(--info); background:var(--info-bg);}
+  .b-neutral{color:var(--neutral); background:var(--neutral-bg);}
+
+  /* 分类分组 */
+  .cat-group{margin-bottom:8px;}
+  .cat-title{font-size:15px; font-weight:600; color:var(--text-2); margin:22px 0 4px;}
+
+  /* 入口卡片（首页三张地图） */
+  .entry-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:12px;}
+  .entry-card{
+    background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius);
+    padding:18px 20px; display:block; text-decoration:none; color:var(--text); text-align:left; width:100%; cursor:pointer;
+  }
+  .entry-card:hover{border-color:var(--border-2);}
+  .entry-card h3{margin:0 0 6px; font-size:16px;}
+  .entry-card p{margin:0; font-size:13px; color:var(--text-2);}
+  .entry-card .tag{display:inline-block; font-size:12px; padding:2px 10px; border-radius:999px; margin-bottom:10px;}
+
+  /* 版本条 */
+  .version-line{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-top:16px;}
+
+  /* 详情面板 */
+  .panel{
+    position:fixed; top:0; right:0; height:100%; width:440px; max-width:100%;
+    background:var(--surface); border-left:0.5px solid var(--border); z-index:100;
+    transform:translateX(100%); transition:transform .2s ease;
+    display:flex; flex-direction:column;
+  }
+  .panel.open{transform:translateX(0);}
+  .panel-head{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 18px; border-bottom:0.5px solid var(--border);}
+  .panel-head .t{font-weight:600; font-size:15px;}
+  .panel-body{overflow-y:auto; padding:18px 20px 40px; flex:1;}
+  .panel-body h3{margin:18px 0 4px;}
+  .panel-body h3:first-child{margin-top:0;}
+  .panel-body p{margin:4px 0 12px;}
+  .close-btn{
+    font:inherit; font-size:14px; background:transparent; border:0.5px solid var(--border-2);
+    border-radius:var(--radius-s); padding:6px 12px; cursor:pointer; color:var(--text-2);
+  }
+  .close-btn:hover{background:var(--surface-2); color:var(--text);}
+  .back-btn{
+    font:inherit; font-size:14px; background:transparent; border:0.5px solid var(--border-2);
+    border-radius:var(--radius-s); padding:6px 12px; cursor:pointer; color:var(--text-2); margin-bottom:14px;
+  }
+  .back-btn:hover{background:var(--surface-2); color:var(--text);}
+  .rel-item{display:block; width:100%; text-align:left; background:var(--surface-2); border:0.5px solid var(--border); border-radius:var(--radius-s); padding:10px 14px; margin:6px 0; cursor:pointer; font:inherit; color:var(--text);}
+  .rel-item:hover{border-color:var(--border-2);}
+  .rel-item .rname{font-weight:500; font-size:14px;}
+  .rel-item .rreason{font-size:12px; color:var(--text-3);}
+  .panel-mask{position:fixed; inset:0; background:rgba(0,0,0,.25); z-index:99; opacity:0; pointer-events:none; transition:opacity .2s ease;}
+  .panel-mask.show{opacity:1; pointer-events:auto;}
+  @media (max-width:719px){
+    .panel{width:100%;}
+  }
+
+  /* 更新记录 */
+  .update-card{background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius); margin:12px 0; overflow:hidden;}
+  .update-head{padding:14px 18px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:12px; background:transparent; border:0; width:100%; font:inherit; color:var(--text); text-align:left;}
+  .update-head:hover{background:var(--surface-2);}
+  .update-head .v{font-weight:600;}
+  .update-head .d{font-size:13px; color:var(--text-3);}
+  .update-body{padding:4px 18px 18px; border-top:0.5px solid var(--border);}
+  .update-body dl{margin:0;}
+  .update-body dt{font-size:13px; color:var(--text-3); margin-top:10px;}
+  .update-body dd{margin:2px 0 0; font-size:14px;}
+
+  /* 反馈 */
+  .fb-layout{display:grid; grid-template-columns:1fr 360px; gap:24px; margin-top:12px;}
+  @media (max-width:820px){.fb-layout{grid-template-columns:1fr;}}
+  .filters{display:flex; gap:8px; flex-wrap:wrap; margin:12px 0;}
+  .filters button{font:inherit; font-size:13px; padding:5px 12px; border-radius:999px; border:0.5px solid var(--border-2); background:transparent; color:var(--text-2); cursor:pointer;}
+  .filters button:hover{background:var(--surface-2);}
+  .filters button[aria-pressed="true"]{background:var(--text); color:var(--surface); border-color:var(--text);}
+  .fb-item{background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius); padding:14px 18px; margin:10px 0;}
+  .fb-item .meta{display:flex; align-items:center; gap:8px; flex-wrap:wrap; font-size:12px; color:var(--text-3); margin-bottom:6px;}
+  .fb-item .content{font-size:14px; margin:4px 0; white-space:pre-wrap; word-break:break-word;}
+  .fb-item .ref{font-size:13px; margin:4px 0;}
+  .fb-item .reply{margin-top:10px; padding:10px 14px; background:var(--surface-2); border-radius:var(--radius-s); font-size:14px;}
+  .fb-item .reply .lbl{font-size:12px; color:var(--text-3);}
+  .fb-state{margin:12px 0; padding:14px 16px; border-radius:var(--radius-s); font-size:14px; background:var(--surface-2); color:var(--text-2);}
+  .fb-state.error{background:var(--warn-bg); color:var(--warn);}
+
+  form.fb-form{background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius); padding:18px 20px;}
+  .fb-form label{display:block; font-size:14px; font-weight:500; margin:12px 0 4px;}
+  .fb-form .req::after{content:" *"; color:var(--warn);}
+  .fb-form input[type=text], .fb-form input[type=url], .fb-form select, .fb-form textarea{
+    width:100%; font:inherit; font-size:14px; padding:8px 12px; border-radius:var(--radius-s);
+    border:0.5px solid var(--border-2); background:var(--surface); color:var(--text);
+  }
+  .fb-form textarea{min-height:96px; resize:vertical;}
+  .fb-form input:focus, .fb-form select:focus, .fb-form textarea:focus{outline:2px solid var(--info); outline-offset:1px;}
+  .fb-form .hint{font-size:12px; color:var(--text-3); margin:4px 0 0;}
+  .fb-form .notice{font-size:12px; color:var(--warn); margin:12px 0 0;}
+  .primary-btn{
+    font:inherit; font-size:14px; font-weight:500; margin-top:16px; padding:9px 20px; border-radius:var(--radius-s);
+    border:0.5px solid var(--text); background:var(--text); color:var(--surface); cursor:pointer;
+  }
+  .primary-btn:hover{opacity:.9;}
+  .primary-btn:disabled{opacity:.5; cursor:not-allowed;}
+  .form-msg{font-size:13px; margin-top:10px;}
+  .form-msg.ok{color:var(--ok);}
+  .form-msg.err{color:var(--warn);}
+
+  ul.dot{list-style:disc; padding-left:20px; margin:6px 0;}
+  ul.dot li{margin:4px 0;}
+  .tagline-box{background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius); padding:16px 20px; margin-top:12px;}
+</style>
+</head>
+<body>
+<h2 class="sr-only">三张活地图学习平台，智能产品与交互主题</h2>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">三张活地图<small>老年人用药安全 · 学习平台</small></div>
+    <nav id="nav" aria-label="主导航">
+      <button data-view="home" aria-current="true">首页</button>
+      <button data-view="domain">领域地图</button>
+      <button data-view="eco">生态地图</button>
+      <button data-view="cog">认知地图</button>
+      <button data-view="updates">更新记录</button>
+      <button data-view="feedback">反馈与建议</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- 首页 -->
+  <section id="view-home" class="view active">
+    <h1>三张活地图</h1>
+    <p class="lead"><strong>选题</strong>：本小组选题为「老年人用药安全与健康管理场景」，旨在通过实地调研发现老年人在日常吃药中面临的最大痛点（如忘记吃药、看不清说明书、吃错药等），并利用机器视觉技术设计一套智能用药提醒与识别系统。</p>
+    <p class="lead">三张地图各回答一组问题：<strong>领域地图</strong>——有哪些问题、需要学会什么；<strong>生态地图</strong>——谁在解决、还有哪些可能；<strong>认知地图</strong>——怎样理解、比较和检验。</p>
+    <p class="lead">核心理念：在真实探索中<strong>发展</strong>兴趣、形成更有依据的判断——不要急着找到兴趣，要学会发展兴趣。</p>
+    <div class="entry-row">
+      <a class="entry-card" href="#domain" data-goto="domain">
+        <span class="tag c-domain">领域地图</span>
+        <h3>领域地图</h3>
+        <p>知识结构与能力要求。回答「有哪些问题？需要学会什么？」——整理关键问题、知识、方法与工具，把兴趣连到学习路径。</p>
+      </a>
+      <a class="entry-card" href="#eco" data-goto="eco">
+        <span class="tag c-eco">生态地图</span>
+        <h3>生态地图</h3>
+        <p>社会需求与外部机会。回答「谁在解决？还有哪些可能性？」——梳理研究团队、企业与代表成果，看清前沿怎样向前推进。</p>
+      </a>
+      <a class="entry-card" href="#cog" data-goto="cog">
+        <span class="tag c-cog">认知地图</span>
+        <h3>认知地图</h3>
+        <p>探索和判断的方法。回答「怎样理解、比较和检验？」——记录思考方法、具体案例与成长习惯，把调研变成自己的判断。</p>
+      </a>
+    </div>
+    <div class="tagline-box">
+      <p style="margin:0 0 6px;"><strong>当前版本</strong>：<span id="home-version">v0.6</span>（选题：老年人用药安全 · 机器视觉用药识别）</p>
+      <p style="margin:0; font-size:13px; color:var(--text-3);">浏览入口：<a href="#updates" data-goto="updates">更新记录</a> · <a href="#feedback" data-goto="feedback">反馈与建议</a>　|　前沿在变，地图跟着长——每周至少检查一次。</p>
+    </div>
+  </section>
+
+  <!-- 领域地图 -->
+  <section id="view-domain" class="view">
+    <h1>领域地图</h1>
+    <p class="lead"><strong>领域地图 = 知识结构与能力要求</strong>，回答「有哪些问题？需要学会什么？」。卡片按分类分组，点开查看详情，把兴趣连到学习路径。</p>
+    <div id="domain-list"></div>
+  </section>
+
+  <!-- 生态地图 -->
+  <section id="view-eco" class="view">
+    <h1>生态地图</h1>
+    <p class="lead"><strong>生态地图 = 社会需求与外部机会</strong>，回答「谁在解决？还有哪些可能性？」。下方是相关的学习资源、工具与社区，以及它们和领域知识之间的关系。</p>
+    <div id="eco-list"></div>
+  </section>
+
+  <!-- 认知地图 -->
+  <section id="view-cog" class="view">
+    <h1>认知地图</h1>
+    <p class="lead"><strong>认知地图 = 探索和判断的方法</strong>，回答「怎样理解、比较和检验？」。下方为教学示例框架，实际内容由本组填写。</p>
+    <div id="cog-list"></div>
+  </section>
+
+  <!-- 更新记录 -->
+  <section id="view-updates" class="view">
+    <h1>更新记录</h1>
+    <p class="lead">按时间倒序记录本组实际完成的修改、原因、问题与下一步计划。</p>
+    <div id="updates-list"></div>
+  </section>
+
+  <!-- 反馈 -->
+  <section id="view-feedback" class="view">
+    <h1>反馈与建议</h1>
+    <p class="lead">同学可以在这里提交反馈；本组在云服务管理页回复并更新处理状态。反馈数据跨设备共享。中期将公开网站，邀请至少 3 名非本组同学独立反馈并逐条回应。</p>
+    <div class="fb-layout">
+      <div>
+        <div class="filters" role="group" aria-label="反馈筛选">
+          <span style="font-size:13px; color:var(--text-3); align-self:center;">地图：</span>
+          <button data-fmap="全部" aria-pressed="true">全部</button>
+          <button data-fmap="全站" aria-pressed="false">全站</button>
+          <button data-fmap="领域地图" aria-pressed="false">领域</button>
+          <button data-fmap="生态地图" aria-pressed="false">生态</button>
+          <button data-fmap="认知地图" aria-pressed="false">认知</button>
+          <span style="font-size:13px; color:var(--text-3); align-self:center; margin-left:8px;">状态：</span>
+          <button data-fstatus="全部" aria-pressed="true">全部</button>
+          <button data-fstatus="待处理" aria-pressed="false">待处理</button>
+          <button data-fstatus="处理中" aria-pressed="false">处理中</button>
+          <button data-fstatus="已处理" aria-pressed="false">已处理</button>
+        </div>
+        <div id="fb-list"></div>
+      </div>
+      <div>
+        <form class="fb-form" id="fb-form" novalidate>
+          <h3 style="margin:0 0 4px;">提交反馈</h3>
+          <label for="fb-target-map" class="req">反馈对象</label>
+          <select id="fb-target-map">
+            <option value="全站">全站</option>
+            <option value="领域地图">领域地图</option>
+            <option value="生态地图">生态地图</option>
+            <option value="认知地图">认知地图</option>
+          </select>
+          <label for="fb-target-entry">条目（可选）</label>
+          <select id="fb-target-entry" disabled>
+            <option value="">— 请先选择具体地图 —</option>
+          </select>
+          <label for="fb-type" class="req">类型</label>
+          <select id="fb-type">
+            <option>内容错误</option>
+            <option>解释不清</option>
+            <option>来源问题</option>
+            <option>使用问题</option>
+            <option>其他建议</option>
+          </select>
+          <label for="fb-content" class="req">具体内容</label>
+          <textarea id="fb-content" maxlength="2000" placeholder="请说明：哪里有问题、为什么有疑问、建议怎样修改"></textarea>
+          <label for="fb-url">依据或参考链接（选填，仅 http/https）</label>
+          <input type="url" id="fb-url" placeholder="https://...">
+          <label for="fb-nickname">昵称（选填，默认匿名）</label>
+          <input type="text" id="fb-nickname" maxlength="50" placeholder="匿名">
+          <p class="notice">反馈内容将公开展示，请勿填写个人隐私、账号凭据或敏感信息。</p>
+          <button type="submit" class="primary-btn" id="fb-submit">提交反馈</button>
+          <div class="form-msg" id="fb-form-msg" role="status"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="panel-mask" id="panel-mask"></div>
+<aside class="panel" id="panel" role="dialog" aria-modal="true" aria-label="条目详情">
+  <div class="panel-head">
+    <span class="t" id="panel-title">详情</span>
+    <button class="close-btn" id="panel-close">关闭</button>
+  </div>
+  <div class="panel-body" id="panel-body"></div>
+</aside>
+
+<script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
+<script>
+"use strict";
+
+/* ===================== 内容数据（集中管理，便于修改） ===================== */
+const DATA = {
+  maps: {
+    domain: {
+      name: "领域地图", color: "domain",
+      categories: ["基本问题", "核心概念", "方法与工具", "课程与学习路径"],
+      entries: [
+        {
+          id: "d-intro", name: "老年人用药安全中的机器视觉", brief: "用机器视觉识别药片与药瓶，帮老人防错、防漏、防混。",
+          category: "基本问题", status: "已核实",
+          detail: {
+            description: "本组选题「老年人用药安全与健康管理场景」。通过实地调研发现老年人在日常吃药中面临的最大痛点——忘记吃药、看不清说明书、吃错药、记混药，并利用机器视觉技术（文字识别 OCR、药片图像识别）设计一套智能用药提醒与识别系统。",
+            relation: "机器视觉是技术手段，老年人用药安全是应用场景；「文字识别」「药片识别」是核心概念，「居家用药识别与防错」是典型任务。",
+            related: [
+              { id: "d-task", reason: "串起全部技术的典型任务" },
+              { id: "d-ocr", reason: "识别药瓶标签与说明书文字" },
+              { id: "d-recognition", reason: "识别不同药片，防止混淆" }
+            ],
+            source: "本组选题说明。",
+            understanding: "核心判断：老年人用药的痛点不是「忘记吃药」那么简单，而是「记混药」「看不清说明书」——这决定了技术重心在「识别与防错」，而非「提醒」。"
+          }
+        },
+        {
+          id: "d-task", name: "居家用药识别与防错", brief: "典型任务：让老人吃药时能识别、能核对、不搞错。",
+          category: "基本问题", status: "已核实",
+          detail: {
+            description: "本组典型任务「老年人居家用药识别与防错」。实地调研发现两大真实痛点：①视力障碍导致吃错药——李奶奶因老花眼，在光线不足的傍晚眯眼凑近看药瓶小字，曾把降压药「一天吃一片」误看成「一次吃一片」，差点用药过量；②记忆力衰退导致重复服药——老人忘记今天是否吃过药，时而漏服、时而重复吃。",
+            relation: "调研结论是：真实的居家用药需求不是简单「定个闹钟」，而是需要一个「智能用药助手」。",
+            related: [
+              { id: "d-ocr", reason: "拍照识别依赖文字识别" },
+              { id: "d-recognition", reason: "防混淆依赖药片图像识别" },
+              { id: "c-revision", reason: "调研推翻「吃药闹钟」的初判，对应一次认识修正" }
+            ],
+            source: "本组实地调研（填写人：闫通修）。",
+            understanding: "产品方案：①拍照识别——药一拿出来，摄像头一扫，语音播报「这是您的降压药，早上吃一片」；②大字语音提醒——界面极致简洁、字号极大，提醒不只靠声音，还要有闪光和震动，内容用大字或方言直观显示。",
+            framework: [
+              "拍照识别：摄像头扫药，语音播报药名与用法",
+              "大字语音提醒：大字号、闪光、震动、方言播报",
+              "防错纠错：识别药片、核对「吃哪种、吃多少、何时吃」"
+            ]
+          }
+        },
+        {
+          id: "d-ocr", name: "文字识别（OCR）", brief: "识别药瓶标签、说明书上的小字。",
+          category: "核心概念", status: "已核实",
+          detail: {
+            description: "文字识别（OCR，光学字符识别）让机器「读」出图片里的文字。在本场景中用于识别药瓶标签、药品说明书上的小字，帮助老花眼老人把「每日三次」看对、不把「一次一片」看成「一天一片」。",
+            relation: "是「拍照识别」功能的核心技术，直接对应「看不清说明书」这一痛点。",
+            related: [
+              { id: "d-task", reason: "拍照识别的技术基础" },
+              { id: "d-data", reason: "需要药瓶标签图像数据来训练和验证" },
+              { id: "e-opencv", reason: "OpenCV 提供图像预处理，辅助文字识别" }
+            ],
+            source: "本组技术选型（成员分工中明确调用 OCR）；通识概念。",
+            understanding: "本组计划先跑通一个识别药瓶标签的 Demo，验证 OCR 在药瓶小字上的可用性。"
+          }
+        },
+        {
+          id: "d-recognition", name: "药片图像识别", brief: "识别不同药片，防止白色药片和黄色药片搞混。",
+          category: "核心概念", status: "已核实",
+          detail: {
+            description: "用图像识别技术区分不同药片的外观（颜色、形状、大小）。调研发现很多老人同时吃多种药，很容易把白色药片和黄色药片搞混——药片识别正是解决「记混药」的核心。",
+            relation: "是「防错纠错」功能的核心技术，直接对应「记混药」这一痛点。",
+            related: [
+              { id: "d-task", reason: "防混淆的核心技术" },
+              { id: "d-data", reason: "需要标注不同药片的图像数据" },
+              { id: "e-pytorch", reason: "可用深度学习框架实现图像识别模型" }
+            ],
+            source: "本组技术选型；通识概念。",
+            understanding: "本组计划调用图像识别 API 实现药片拍照识别；从「识别种类」起步，逐步做到「核对用法」。"
+          }
+        },
+        {
+          id: "d-data", name: "数据与标注", brief: "机器视觉模型需要带标签的图像数据。",
+          category: "方法与工具", status: "已核实",
+          detail: {
+            description: "监督学习需要带标签的数据。对用药场景来说，主要两类：①药瓶标签图——标注其中的药名与用法用量文字，供 OCR 识别；②药片外观图——标注颜色、形状、大小与种类，供图像识别区分「白色药片」和「黄色药片」。",
+            relation: "是 OCR 与药片识别的共同前提；数据质量直接影响识别准确率，采集时要覆盖「光线不足、小字」等真实场景。",
+            related: [
+              { id: "d-ocr", reason: "文字识别需要标签图像数据" },
+              { id: "d-recognition", reason: "药片识别需要外观标注数据" }
+            ],
+            source: "课堂：2026-10-16 第二讲（杨洋）数据采集、标注与划分的方法论；结合本组用药场景说明。",
+            understanding: "数据标注的三个关键点：①采集要覆盖真实场景（不同光线、角度、遮挡），不能只拍清晰样本；②标注要定统一规则（药片颜色/形状/大小分类标准）；③划分数据集时避免近似样本泄漏（同一次拍摄的相邻帧不能随机散进各子集）。",
+            framework: [
+              "采集：药瓶/药盒标签、不同药片外观，覆盖光线不足、多角度、遮挡",
+              "标注：标签文字（药名、用法用量）+ 药片属性（颜色、形状、大小、种类）",
+              "划分：训练集 / 验证集 / 测试集，避免近似样本泄漏"
+            ]
+          }
+        },
+        {
+          id: "d-course", name: "课程与学习路径", brief: "把机器视觉能力对应到课程。",
+          category: "课程与学习路径", status: "已核实",
+          detail: {
+            description: "本组技术路线（OCR + 药片图像识别）对应培养方案里的相关课程：视觉智能（大三维，机器视觉核心）、深度学习基础（大二）、人工智能数据工程（大三）、人工智能引论（大一）。",
+            relation: "让「学什么」落到「为什么学」；本组分工中「机器视觉技术攻坚」正是对应这些课程的能力。",
+            related: [
+              { id: "d-ocr", reason: "OCR 是机器视觉的基础任务" },
+              { id: "e-zju", reason: "课程来自浙大人工智能学院培养方案" },
+              { id: "c-interest", reason: "据此制定本组的学习计划" }
+            ],
+            source: "课堂：2026-10-16 第二讲（杨洋）修读导图与课程对应；通识。",
+            understanding: "关键课程：视觉智能（大三）、深度学习基础（大二）、人工智能数据工程（大三）、人工智能引论（大一）；入门可先学神经网络与 OpenCV。"
+          }
+        }
+      ]
+    },
+    eco: {
+      name: "生态地图", color: "eco",
+      categories: ["研究团队", "工具与社区", "学习资源"],
+      entries: [
+        {
+          id: "e-zju", name: "浙江大学人工智能学院", brief: "本课程主办方，机器视觉相关课程与研究平台。",
+          category: "研究团队", status: "已核实",
+          detail: {
+            description: "本课程授课单位。杨洋（副院长、博导）研究具身智能与脑机接口，其「番茄采摘机器人」案例正是机器视觉的落地演示；学院培养方案分智能理论、模型、系统、工程四个方向，「视觉智能」是智能模型方向的必修课。",
+            relation: "本组「机器视觉 + 用药安全」的技术路线，直接受益于学院的视觉智能课程与研究资源。",
+            related: [
+              { id: "d-course", reason: "视觉智能等课程来自学院培养方案" },
+              { id: "d-recognition", reason: "学院研究为药片识别提供方法支撑" },
+              { id: "c-interest", reason: "为本组提供能力与机会的支撑" }
+            ],
+            source: "课堂：2026-10-16 第二讲（杨洋）主讲人介绍与培养方案。",
+            understanding: "杨洋研究分理论与应用：理论是领域泛化、鲁棒性学习；应用是具身智能与脑机接口。"
+          }
+        },
+        {
+          id: "e-opencv", name: "OpenCV", brief: "经典的开源计算机视觉库。",
+          category: "工具与社区", status: "已核实",
+          detail: {
+            description: "广泛使用的开源计算机视觉库，提供图像处理与经典视觉算法实现。课堂散场答疑提到，入门视觉方向「要先学神经网络与 OpenCV」。",
+            relation: "可用于药瓶标签的图像预处理（增强、裁剪），辅助 OCR 与药片识别。",
+            related: [
+              { id: "d-ocr", reason: "提供图像预处理，辅助文字识别" },
+              { id: "d-recognition", reason: "提供传统图像处理方法" }
+            ],
+            source: "课堂：2026-10-16 第二讲散场答疑提及 OpenCV；入口 https://opencv.org/。",
+            understanding: "定位为入门实践工具；尚未系统上手。"
+          }
+        },
+        {
+          id: "e-pytorch", name: "PyTorch", brief: "主流的深度学习框架。",
+          category: "工具与社区", status: "已核实",
+          detail: {
+            description: "广泛使用的深度学习框架，用于搭建和训练神经网络模型。",
+            relation: "可用于实现药片图像识别模型。",
+            related: [
+              { id: "d-recognition", reason: "用于实现药片识别模型" }
+            ],
+            source: "入口 https://pytorch.org/（公开可核查）；课堂课程体系相关。",
+            understanding: "定位为模型实现框架；尚未实践。"
+          }
+        },
+        {
+          id: "e-waytoagi", name: "WaytoAGI", brief: "综合性 AI 学习资源入口。",
+          category: "学习资源", status: "待阅读",
+          detail: {
+            description: "「通往 AGI 之路」综合性 AI 学习资源入口。课堂特别提醒：要访问它的飞书知识库，而不是只看首页推荐的工具。",
+            relation: "用于在更广的 AI 图景中定位「机器视觉」，追踪前沿工具与案例。",
+            related: [
+              { id: "c-interest", reason: "为制定学习计划提供资源入口" }
+            ],
+            source: "课堂：2026-10-17 第三讲（孙凌云）推荐 WaytoAGI.com 及其飞书知识库；入口 https://www.waytoagi.com/。",
+            understanding: "待阅读：尚未阅读具体材料，暂不形成理解。"
+          }
+        }
+      ]
+    },
+    cog: {
+      name: "认知地图", color: "cog",
+      categories: ["问题分析", "学习规划", "认识修正", "认知工具"],
+      entries: [
+        {
+          id: "c-interest", name: "兴趣、能力与机会的关系", brief: "兴趣是探索出来的，不是先想清楚的。",
+          category: "学习规划", status: "已核实",
+          detail: {
+            description: "课堂把「兴趣、能力、机会」画成三角：什么问题让我愿意持续探索、我和我的环境是否具备支撑条件、什么值得我长期投入。判断句是——兴趣是在探索中逐渐形成的持续投入意愿。",
+            relation: "本组用这一框架，把「智慧医疗 + 适老化」的兴趣落到具体的机器视觉用药识别任务上。",
+            related: [
+              { id: "e-zju", reason: "课程与研究是「机会」的来源" },
+              { id: "d-course", reason: "课程路径是「能力」的来源" }
+            ],
+            source: "课堂：2026-10-17 第三讲（孙凌云）框架；本组填写（闫通修）。",
+            understanding: "本组填写：我对「智慧医疗」与「适老化设计」非常感兴趣，特别是如何通过科技手段解决老年人在现实生活中的「数字鸿沟」和日常安全痛点。已有能力：具备基础 Web 前端开发能力（HTML/CSS/JavaScript），掌握一定的用户调研与问卷访谈技巧，能独立完成初步的需求采集。",
+            framework: [
+              "下一步（1）：一周内实地走访，完成 5-10 位老年人的用药场景深度访谈",
+              "下一步（2）：学习机器视觉中「文字识别（OCR）」的基础调用逻辑，跑通识别药瓶标签的 Demo",
+              "下一步（3）：把调研痛点与机器视觉技术匹配，输出产品功能需求文档（PRD）"
+            ]
+          }
+        },
+        {
+          id: "c-compare", name: "如何比较两种方法", brief: "用统一框架比较技术路线，避免凭印象选。",
+          category: "问题分析", status: "已核实",
+          detail: {
+            description: "课堂给了现成比较案例：判定式 vs 生成式（哪个更难）、开源 vs 开放权重（开放了什么、允许做什么）、云端 vs 端侧部署。比较的关键是确定「比较条件」和「依据」。",
+            relation: "本组可用它比较不同的技术路线，例如「调用现成 OCR/图像识别 API」与「自训练模型」的取舍。",
+            related: [
+              { id: "d-ocr", reason: "比较不同 OCR 实现方案" },
+              { id: "d-recognition", reason: "比较 API 调用与自训练模型" }
+            ],
+            source: "课堂：2026-10-16 第二讲（判定式／生成式、云端／端侧）、2026-10-17 第三讲（开源／开放权重）。",
+            understanding: "已理解「判定式比生成式简单」的概率论证；本组对「API vs 自训练」的具体比较尚未完成。",
+            framework: [
+              "比较的问题是什么",
+              "比较的条件是什么",
+              "依据是什么",
+              "当前判断是什么",
+              "局限在哪里"
+            ]
+          }
+        },
+        {
+          id: "c-halflife", name: "知识半衰期", brief: "不同知识衰减速度不同，学习策略也不同。",
+          category: "认知工具", status: "已核实",
+          detail: {
+            description: "课堂把「学什么」按半衰期分成五类：基础知识（长，做深）、核心专业能力（中长，做强）、前沿专业知识（快速缩短，做活）、工具与工程技能（很短，做快）、高阶能力（反而升值，做高）。",
+            relation: "帮本组判断：机器视觉里的数学与识别原理要深挖，而具体的 OCR API、框架工具要「做快」，不被某个工具绑死。",
+            related: [
+              { id: "d-course", reason: "培养方案按半衰期组织" },
+              { id: "e-waytoagi", reason: "工具类技能半衰期短，需持续追踪更新" }
+            ],
+            source: "课堂：2026-10-17 第三讲（孙凌云）「知识半衰期分化」表格。",
+            understanding: "总结句：长半衰期知识做深，短半衰期知识做快，高阶能力做强。"
+          }
+        },
+        {
+          id: "c-revision", name: "一次认识修正", brief: "从「吃药闹钟」到「智能识别防错」的判断转变。",
+          category: "认识修正", status: "已核实",
+          detail: {
+            description: "记录「原来的理解 → 变化 → 现在的理解」的过程。本组已经历一次真实的认识修正。",
+            relation: "这次修正直接改变了本组的系统重心：从「提醒时间」转向「识别与防错」。",
+            related: [
+              { id: "d-task", reason: "修正后的判断直接体现在典型任务里" }
+            ],
+            source: "本组填写（闫通修）。",
+            understanding: "修正前的认识：之前主观认为老年人吃药最大的问题是「忘记吃」，所以觉得只需要做一个「吃药闹钟」就够了。实地调研后修正为：老年人吃药最大的痛点其实是「记混药」和「看不清说明书」——很多老人同时吃多种药，很容易把白色药片和黄色药片搞混，或因老花眼把「每日三次」看成「每日两次」。因此系统重心应从「单纯提醒时间」转移到「智能药片识别与防错纠错」上来。",
+            framework: [
+              "原来的理解：最大问题是「忘记吃」，只需「吃药闹钟」",
+              "新调研带来的变化：真正痛点是「记混药」「看不清说明书」",
+              "现在的理解：重心转向「智能药片识别与防错纠错」"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  updates: [
+    {
+      version: "v0.6",
+      date: "2026-11-08",
+      summary: "新增「AI 解读」能力：在条目详情中用 AI 解释技术、相关条目与对应课程。",
+      mapScope: "领域地图、生态地图、认知地图（条目详情面板）",
+      changes: "在每个条目详情面板加入「用 AI 解读这个概念」按钮，调用云服务免密钥大模型，结合地图内容流式回答「它是什么、解决什么问题、和什么相关、对应哪些课程」；AI 回答严格基于地图内容，不编造。",
+      reason: "满足作业「至少实现一项与地图直接相关的 AI 能力」的硬性要求。",
+      openIssues: "AI 解读功能需发布后实测；回答内容受地图内容与模型能力约束。",
+      next: "实测 AI 解读功能；补充数据采集标注。",
+      assign: "待填写",
+      check: "待测试",
+      feedbackRef: "无"
+    },
+    {
+      version: "v0.5",
+      date: "2026-11-08",
+      summary: "选题定稿为「老年人用药安全」，填入认知地图、成员分工与实地调研结果。",
+      mapScope: "首页、领域地图、生态地图、认知地图、更新记录",
+      changes: "选题定稿为「老年人用药安全与健康管理场景」（机器视觉技术路线）；领域地图重建为 OCR、药片识别、用药场景；认知地图填入「兴趣能力机会」「一次认识修正」的真实填写；补入成员分工与实地调研痛点（李奶奶案例、记混药、看不清说明书）。",
+      reason: "小组完成实地调研，用调研结果修正了选题方向与认知，选题与内容最终定稿。",
+      openIssues: "药片识别与 OCR 尚未实际开发（仅跑通 Demo 待做）；数据标注待开展。",
+      next: "完成 OCR Demo 与药片识别；补充数据采集标注；补入至少一个分析案例。",
+      assign: "闫通修（组长，统筹+调研+需求）；黄原（机器视觉技术攻坚：OCR 与图像识别 API）；张守约（Web 前端与小程序、视觉交互、跨设备测试）；魏祥昆（后端数据、药品数据库、发布部署）",
+      check: "待测试",
+      feedbackRef: "无"
+    },
+    {
+      version: "v0.4",
+      date: "2026-11-08",
+      summary: "典型任务改为自选的「慢病老人居家用药管理」，方向仍为智能产品与交互。",
+      mapScope: "首页、领域地图、生态地图、认知地图",
+      changes: "典型任务由「老人夜间安全起身」改为自选的「慢病老人居家用药管理」；更新三张地图的关联与说明；自选任务的具体需求细节标注「待核实」，仅套用课堂方法论、不编造数据。",
+      reason: "小组希望选题不与课堂演示案例（老人夜起）重复，改为同类但课堂未出现的自选任务。",
+      openIssues: "自选任务的实地需求调研未开展；认知地图待填写。",
+      next: "调研用药场景的真实需求，补入认知地图。",
+      assign: "待填写",
+      check: "待测试",
+      feedbackRef: "无"
+    },
+    {
+      version: "v0.3",
+      date: "2026-11-08",
+      summary: "选题方向由「机器视觉」切换为「智能产品与交互」。",
+      mapScope: "首页、领域地图、生态地图、认知地图",
+      changes: "三张地图整体重写：领域地图改为智能产品概念、需要与需求、双钻石、五条课程线；生态地图改为浙大智能设计专业、Rokid、Ray-Ban Meta、AI Pin；认知地图改为需要需求分析、双钻石等。",
+      reason: "小组决定放弃「机器视觉」方向，转向「智能产品与交互」（第四讲张克俊方向）。",
+      openIssues: "认知地图「兴趣能力机会」「一次认识修正」待填写。",
+      next: "确定典型任务，填写认知地图。",
+      assign: "待填写",
+      check: "待测试",
+      feedbackRef: "无"
+    },
+    {
+      version: "v0.2",
+      date: "2026-11-08",
+      summary: "补入课堂真实内容，以「番茄采摘机器人」为主线充实三张地图。",
+      mapScope: "领域地图、生态地图、认知地图",
+      changes: "领域地图新增「番茄采摘机器人」「课程与学习路径」；生态地图新增「浙江大学人工智能学院」；认知地图新增「知识半衰期」；各条目来源标注到具体讲次，状态由「待核实」改为「已核实」。",
+      reason: "把演示初稿替换为可核查的课堂真实内容（第二讲、第三讲）。",
+      openIssues: "认知地图的本组具体填写仍待完成。",
+      next: "本组讨论后填写认知地图。",
+      assign: "待填写",
+      check: "待测试",
+      feedbackRef: "无"
+    },
+    {
+      version: "v0.1",
+      date: "2026-10-25",
+      summary: "搭建基础原型：建立六个视图与三张地图骨架，接入反馈共享数据库。",
+      mapScope: "首页、领域地图、生态地图、认知地图、更新记录、反馈页",
+      changes: "建立卡片式结构与详情面板；实现跨地图关联跳转；接入云服务共享数据库实现反馈提交与查看。",
+      reason: "首次搭建，先跑通基础版本。",
+      openIssues: "三张地图内容均为演示初稿，需核实并逐步补充真实学习内容。",
+      next: "补充真实课堂与阅读内容，核实各条目来源。",
+      assign: "待填写",
+      check: "待测试",
+      feedbackRef: "无"
+    }
+  ]
+};
+
+/* ===================== 工具 ===================== */
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+const STATUS_CLASS = {
+  "待核实": "b-info", "待阅读": "b-neutral", "待填写": "b-neutral", "已核实": "b-ok",
+  "待处理": "b-warn", "处理中": "b-info", "已处理": "b-ok"
+};
+
+function escapeHtml(s){
+  return String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function entryById(id){
+  for (const mk in DATA.maps){
+    const e = DATA.maps[mk].entries.find((x) => x.id === id);
+    if (e) return { map: DATA.maps[mk], entry: e, mapKey: mk };
+  }
+  return null;
+}
+
+/* ===================== 路由 ===================== */
+const VIEW_IDS = ["home","domain","eco","cog","updates","feedback"];
+function showView(id){
+  if (!VIEW_IDS.includes(id)) id = "home";
+  $$(".view").forEach((v) => v.classList.remove("active"));
+  $("#view-" + id).classList.add("active");
+  $$("nav button").forEach((b) => b.setAttribute("aria-current", b.dataset.view === id ? "true" : "false"));
+  if (id === "feedback") loadFeedback();
+}
+function route(){
+  const h = location.hash.replace("#","") || "home";
+  showView(h);
+}
+window.addEventListener("hashchange", route);
+$$("#nav button").forEach((b) => b.addEventListener("click", () => { location.hash = b.dataset.view; }));
+$$("[data-goto]").forEach((a) => a.addEventListener("click", (e) => {
+  e.preventDefault(); location.hash = a.dataset.goto;
+}));
+
+/* ===================== 渲染地图 ===================== */
+function renderMap(mapKey){
+  const map = DATA.maps[mapKey];
+  const container = $("#" + mapKey + "-list");
+  container.innerHTML = "";
+  for (const cat of map.categories){
+    const group = document.createElement("div");
+    group.className = "cat-group";
+    const title = document.createElement("div");
+    title.className = "cat-title";
+    title.textContent = cat;
+    group.appendChild(title);
+    const grid = document.createElement("div");
+    grid.className = "grid";
+    for (const e of map.entries.filter((x) => x.category === cat)){
+      grid.appendChild(cardEl(e, map));
+    }
+    group.appendChild(grid);
+    container.appendChild(group);
+  }
+}
+function cardEl(e, map){
+  const b = document.createElement("button");
+  b.className = "card";
+  b.type = "button";
+  b.dataset.entry = e.id;
+  b.innerHTML =
+    '<span class="cat c-' + map.color + '">' + escapeHtml(e.category) + "</span>" +
+    '<p class="name">' + escapeHtml(e.name) + "</p>" +
+    '<p class="brief">' + escapeHtml(e.brief) + "</p>" +
+    '<div class="foot"><span class="badge ' + (STATUS_CLASS[e.status] || "b-neutral") + '">' + escapeHtml(e.status) + '</span>' +
+    '<span class="open">查看详情</span></div>';
+  b.addEventListener("click", () => openDetail(e.id));
+  return b;
+}
+
+/* ===================== 详情面板 ===================== */
+const panel = $("#panel");
+const panelMask = $("#panel-mask");
+let detailStack = [];
+
+function openDetail(id){
+  const found = entryById(id);
+  if (!found) return;
+  detailStack.push(id);
+  renderDetail(id);
+  panel.classList.add("open");
+  panelMask.classList.add("show");
+}
+function renderDetail(id){
+  const found = entryById(id);
+  if (!found) return;
+  const { map, entry } = found;
+  $("#panel-title").textContent = map.name + " · " + entry.name;
+  const body = $("#panel-body");
+  body.innerHTML = "";
+
+  if (detailStack.length > 1){
+    const back = document.createElement("button");
+    back.className = "back-btn";
+    back.type = "button";
+    back.textContent = "← 返回上一项";
+    back.addEventListener("click", () => {
+      detailStack.pop();
+      renderDetail(detailStack[detailStack.length - 1]);
+    });
+    body.appendChild(back);
+  }
+
+  body.insertAdjacentHTML("beforeend",
+    '<p class="muted" style="margin-top:0;">分类：' + escapeHtml(entry.category) + " · 状态：" +
+    '<span class="badge ' + (STATUS_CLASS[entry.status] || "b-neutral") + '">' + escapeHtml(entry.status) + "</span></p>" +
+    "<h3>基本说明</h3><p>" + escapeHtml(entry.detail.description) + "</p>" +
+    "<h3>与选题的关系</h3><p>" + escapeHtml(entry.detail.relation) + "</p>"
+  );
+
+  if (entry.detail.related && entry.detail.related.length){
+    body.insertAdjacentHTML("beforeend", "<h3>相关条目及关系</h3>");
+    for (const rel of entry.detail.related){
+      const relFound = entryById(rel.id);
+      if (!relFound) continue;
+      const btn = document.createElement("button");
+      btn.className = "rel-item";
+      btn.type = "button";
+      btn.innerHTML = '<span class="rname">' + escapeHtml(relFound.map.name) + " · " + escapeHtml(relFound.entry.name) + "</span>" +
+        '<br><span class="rreason">' + escapeHtml(rel.reason) + "</span>";
+      btn.addEventListener("click", () => openDetail(rel.id));
+      body.appendChild(btn);
+    }
+  }
+
+  body.insertAdjacentHTML("beforeend", "<h3>来源或依据</h3><p>" + escapeHtml(entry.detail.source) + "</p>");
+  body.insertAdjacentHTML("beforeend", "<h3>当前理解与尚存问题</h3><p>" + escapeHtml(entry.detail.understanding) + "</p>");
+
+  if (entry.detail.framework && entry.detail.framework.length){
+    body.insertAdjacentHTML("beforeend", "<h3>填写框架</h3>");
+    const ul = document.createElement("ul");
+    ul.className = "dot";
+    for (const f of entry.detail.framework){
+      const li = document.createElement("li");
+      li.textContent = f;
+      ul.appendChild(li);
+    }
+    body.appendChild(ul);
+  }
+
+  const aiWrap = document.createElement("div");
+  aiWrap.style.cssText = "margin-top:20px;";
+  const aiBtn = document.createElement("button");
+  aiBtn.className = "primary-btn";
+  aiBtn.type = "button";
+  aiBtn.textContent = "用 AI 解读这个概念";
+  aiWrap.appendChild(aiBtn);
+  const aiOut = document.createElement("div");
+  aiOut.style.cssText = "margin-top:12px; padding:12px 14px; background:var(--surface-2); border-radius:var(--radius-s); font-size:14px; line-height:1.7; white-space:pre-wrap; display:none;";
+  aiWrap.appendChild(aiOut);
+  aiBtn.addEventListener("click", () => askAI(map, entry, aiBtn, aiOut));
+  body.appendChild(aiWrap);
+
+  const fbBtn = document.createElement("button");
+  fbBtn.className = "primary-btn";
+  fbBtn.type = "button";
+  fbBtn.textContent = "对此内容提反馈";
+  fbBtn.addEventListener("click", () => {
+    closePanel();
+    location.hash = "feedback";
+    setTimeout(() => prefillFeedback(map.name, entry.name), 50);
+  });
+  body.appendChild(fbBtn);
+}
+function closePanel(){
+  panel.classList.remove("open");
+  panelMask.classList.remove("show");
+  detailStack = [];
+}
+$("#panel-close").addEventListener("click", closePanel);
+panelMask.addEventListener("click", closePanel);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && panel.classList.contains("open")) closePanel();
+});
+
+/* ===================== 更新记录 ===================== */
+function renderUpdates(){
+  const c = $("#updates-list");
+  c.innerHTML = "";
+  const latest = DATA.updates[0] ? DATA.updates[0].version : "v0.1";
+  $("#home-version").textContent = latest;
+  for (const u of DATA.updates){
+    const card = document.createElement("div");
+    card.className = "update-card";
+    const head = document.createElement("button");
+    head.className = "update-head";
+    head.type = "button";
+    head.innerHTML = '<span class="v">' + escapeHtml(u.version) + '</span>' +
+      '<span style="flex:1; font-size:14px; color:var(--text-2);">' + escapeHtml(u.summary) + "</span>" +
+      '<span class="d">' + escapeHtml(u.date) + "</span>";
+    const body = document.createElement("div");
+    body.className = "update-body";
+    body.style.display = "none";
+    body.innerHTML =
+      "<dl>" +
+      "<dt>涉及地图与条目</dt><dd>" + escapeHtml(u.mapScope) + "</dd>" +
+      "<dt>具体修改</dt><dd>" + escapeHtml(u.changes) + "</dd>" +
+      "<dt>修改原因与依据</dt><dd>" + escapeHtml(u.reason) + "</dd>" +
+      "<dt>尚存问题</dt><dd>" + escapeHtml(u.openIssues) + "</dd>" +
+      "<dt>下一步计划</dt><dd>" + escapeHtml(u.next) + "</dd>" +
+      "<dt>实际分工</dt><dd>" + escapeHtml(u.assign) + "</dd>" +
+      "<dt>检查结果</dt><dd>" + escapeHtml(u.check) + "</dd>" +
+      "<dt>相关反馈编号</dt><dd>" + escapeHtml(u.feedbackRef) + "</dd>" +
+      "</dl>";
+    head.addEventListener("click", () => {
+      body.style.display = body.style.display === "none" ? "block" : "none";
+    });
+    card.appendChild(head);
+    card.appendChild(body);
+    c.appendChild(card);
+  }
+}
+
+/* ===================== 反馈（云服务共享数据库） ===================== */
+let cloud = null;
+let cloudReady = false;
+function initCloud(){
+  if (typeof WorkBuddyCloud === "undefined") return false;
+  cloud = WorkBuddyCloud.createWorkBuddyCloud({
+    endpoint: "https://three-livemaps-78529.app.workbuddy.host",
+    oauthRelayBaseUrl: "https://www.workbuddy.cn/v2/as/genie-baas/oauth",
+    publishableKey: "wbpk_l295IaWuSL7X43JCPdPnFt_duczVlfvSLf0todDt30yizZZkLDwGlSn"
+  });
+  cloudReady = true;
+  return true;
+}
+
+/* ===================== AI 解读（地图相关 AI 能力） ===================== */
+let aiModelId = null;
+async function askAI(map, entry, btn, out){
+  if (!cloudReady && !initCloud()){
+    out.style.display = "block";
+    out.textContent = "AI 服务未加载，请检查网络后刷新。";
+    return;
+  }
+  btn.disabled = true;
+  btn.textContent = "正在解读…";
+  out.style.display = "block";
+  out.textContent = "正在准备…";
+  try {
+    if (!aiModelId){
+      const models = await cloud.llm.models.list();
+      const m = models.find((x) => x.disabled !== true);
+      if (!m){ out.textContent = "当前没有可用的模型。"; return; }
+      aiModelId = m.id;
+    }
+    const relatedText = (entry.detail.related || []).map((rel) => {
+      const f = entryById(rel.id);
+      return f ? (f.map.name + "·" + f.entry.name + "（" + rel.reason + "）") : "";
+    }).filter((x) => x).join("；");
+    const courseEntry = entryById("d-course");
+    const courseText = courseEntry ? (courseEntry.entry.detail.framework || []).join("；") : "";
+
+    const context =
+      "条目名称：" + entry.name + "\n" +
+      "所属地图：" + map.name + "\n" +
+      "类别：" + entry.category + "\n" +
+      "基本说明：" + entry.detail.description + "\n" +
+      "与选题的关系：" + entry.detail.relation + "\n" +
+      "来源：" + entry.detail.source + "\n" +
+      "相关条目：" + (relatedText || "无") + "\n" +
+      "相关课程信息：" + (courseText || "地图中未提供");
+
+    const messages = [
+      { role: "system", content: "你是「三张活地图」学习平台的 AI 助手，帮助同学理解地图中的概念。回答必须严格基于提供的『地图内容』，只解释、归纳、关联地图里已有的信息；地图里没有的信息要明确说『地图中未提供』，绝不编造事实、论文、人物或数据。用简体中文，面向大一新生，通俗易懂，200 字以内。" },
+      { role: "user", content: "请解读下面这个条目，回答三件事：①它是什么、解决什么问题；②它和哪些条目相关、什么关系；③学习它需要哪些课程或基础。\n\n" + context }
+    ];
+
+    out.textContent = "";
+    for await (const chunk of cloud.llm.chat.completions.create({
+      model: aiModelId,
+      messages: messages,
+      stream: true
+    })){
+      const delta = chunk.choices[0]?.delta;
+      if (delta?.content) out.textContent += delta.content;
+    }
+    if (!out.textContent) out.textContent = "（模型未返回内容）";
+  } catch (err) {
+    console.error(err);
+    out.textContent = "解读失败：" + (err && err.message ? err.message : String(err)) + "，请稍后重试。";
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "用 AI 解读这个概念";
+  }
+}
+
+let fbCache = [];
+let fbMapFilter = "全部";
+let fbStatusFilter = "全部";
+
+function formatTime(t){
+  if (!t) return "";
+  const d = new Date(t);
+  if (isNaN(d.getTime())) return String(t);
+  return d.toLocaleString("zh-CN", { hour12: false });
+}
+
+async function loadFeedback(){
+  const list = $("#fb-list");
+  if (!cloudReady){
+    if (!initCloud()){
+      list.innerHTML = '<div class="fb-state error">反馈服务未加载：无法连接云服务 SDK，请检查网络后刷新。</div>';
+      return;
+    }
+  }
+  list.innerHTML = '<div class="fb-state">加载中…</div>';
+  try {
+    const { data, error } = await cloud.database
+      .from("feedback")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(200);
+    if (error) throw error;
+    fbCache = Array.isArray(data) ? data : [];
+    renderFeedbackList();
+  } catch (err) {
+    console.error(err);
+    list.innerHTML = '<div class="fb-state error">加载失败：' + escapeHtml(err && err.message ? err.message : String(err)) + "，请稍后重试。</div>";
+  }
+}
+
+function renderFeedbackList(){
+  const list = $("#fb-list");
+  let rows = fbCache.filter((r) => {
+    const mok = fbMapFilter === "全部" || r.target_map === fbMapFilter;
+    const sok = fbStatusFilter === "全部" || r.status === fbStatusFilter;
+    return mok && sok;
+  });
+  if (!rows.length){
+    list.innerHTML = '<div class="fb-state">暂无反馈。</div>';
+    return;
+  }
+  list.innerHTML = "";
+  for (const r of rows){
+    const item = document.createElement("div");
+    item.className = "fb-item";
+    let target = r.target_map;
+    if (r.target_map && r.target_map !== "全站" && r.target_entry){
+      target = r.target_map + " · " + r.target_entry;
+    }
+    let refHtml = "";
+    if (r.reference_url){
+      refHtml = '<div class="ref">参考：<a href="' + escapeHtml(r.reference_url) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(r.reference_url) + "</a></div>";
+    }
+    let replyHtml = "";
+    if (r.reply){
+      replyHtml = '<div class="reply"><span class="lbl">小组回复：</span>' + escapeHtml(r.reply);
+      if (r.resolved_version) replyHtml += '（对应版本 ' + escapeHtml(r.resolved_version) + "）";
+      replyHtml += "</div>";
+    }
+    item.innerHTML =
+      '<div class="meta"><span>#' + escapeHtml(r.id) + "</span>" +
+      '<span class="badge ' + (STATUS_CLASS[r.type] || "b-neutral") + '">' + escapeHtml(r.type) + "</span>" +
+      '<span class="badge ' + (STATUS_CLASS[r.status] || "b-warn") + '">' + escapeHtml(r.status) + "</span>" +
+      '<span>' + escapeHtml(target) + "</span>" +
+      "<span>" + escapeHtml(r.nickname || "匿名") + "</span>" +
+      "<span>" + formatTime(r.created_at) + "</span></div>" +
+      '<div class="content">' + escapeHtml(r.content) + "</div>" +
+      refHtml + replyHtml;
+    list.appendChild(item);
+  }
+}
+
+function setupFilters(){
+  $$("#view-feedback .filters button[data-fmap]").forEach((b) => {
+    b.addEventListener("click", () => {
+      fbMapFilter = b.dataset.fmap;
+      $$("#view-feedback .filters button[data-fmap]").forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+      renderFeedbackList();
+    });
+  });
+  $$("#view-feedback .filters button[data-fstatus]").forEach((b) => {
+    b.addEventListener("click", () => {
+      fbStatusFilter = b.dataset.fstatus;
+      $$("#view-feedback .filters button[data-fstatus]").forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+      renderFeedbackList();
+    });
+  });
+}
+
+function populateEntrySelect(){
+  const mapSel = $("#fb-target-map");
+  const entrySel = $("#fb-target-entry");
+  const mapName = mapSel.value;
+  const map = DATA.maps.domain.name === mapName ? DATA.maps.domain
+    : DATA.maps.eco.name === mapName ? DATA.maps.eco
+    : DATA.maps.cog.name === mapName ? DATA.maps.cog : null;
+  entrySel.innerHTML = "";
+  if (!map){
+    entrySel.disabled = true;
+    const o = document.createElement("option");
+    o.value = "";
+    o.textContent = "— 请先选择具体地图 —";
+    entrySel.appendChild(o);
+    return;
+  }
+  entrySel.disabled = false;
+  const o0 = document.createElement("option");
+  o0.value = "";
+  o0.textContent = "（不指定具体条目）";
+  entrySel.appendChild(o0);
+  for (const e of map.entries){
+    const o = document.createElement("option");
+    o.value = e.name;
+    o.textContent = e.name;
+    entrySel.appendChild(o);
+  }
+}
+function prefillFeedback(mapName, entryName){
+  $("#fb-target-map").value = mapName;
+  populateEntrySelect();
+  if (entryName){
+    const entrySel = $("#fb-target-entry");
+    for (const o of entrySel.options) if (o.value === entryName) { entrySel.value = entryName; break; }
+  }
+}
+$("#fb-target-map").addEventListener("change", populateEntrySelect);
+
+function setupForm(){
+  const form = $("#fb-form");
+  const msg = $("#fb-form-msg");
+  const submitBtn = $("#fb-submit");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const mapName = $("#fb-target-map").value;
+    const entryName = $("#fb-target-entry").value;
+    const type = $("#fb-type").value;
+    const content = $("#fb-content").value.trim();
+    const url = $("#fb-url").value.trim();
+    const nickname = $("#fb-nickname").value.trim() || null;
+
+    msg.textContent = "";
+    msg.className = "form-msg";
+    if (!content){
+      msg.textContent = "请填写具体内容。";
+      msg.className = "form-msg err";
+      $("#fb-content").focus();
+      return;
+    }
+    if (url && !/^https?:\/\//i.test(url)){
+      msg.textContent = "参考链接仅允许 http 或 https 地址。";
+      msg.className = "form-msg err";
+      return;
+    }
+    if (!cloudReady && !initCloud()){
+      msg.textContent = "反馈服务未加载，无法提交，请检查网络后重试。";
+      msg.className = "form-msg err";
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "提交中…";
+    try {
+      const payload = {
+        target_map: mapName,
+        target_entry: entryName || null,
+        type: type,
+        content: content,
+        reference_url: url || null,
+        nickname: nickname
+      };
+      const { data, error } = await cloud.database.from("feedback").insert(payload).select();
+      if (error) throw error;
+      const saved = Array.isArray(data) && data.length > 0;
+      if (saved){
+        msg.textContent = "提交成功，感谢反馈。";
+        msg.className = "form-msg ok";
+        form.reset();
+        populateEntrySelect();
+      } else {
+        msg.textContent = "提交未成功保存，请重试。";
+        msg.className = "form-msg err";
+      }
+      loadFeedback();
+    } catch (err) {
+      console.error(err);
+      msg.textContent = "提交失败：" + escapeHtml(err && err.message ? err.message : String(err)) + "，表单内容已保留，可重试。";
+      msg.className = "form-msg err";
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "提交反馈";
+    }
+  });
+}
+
+/* ===================== 初始化 ===================== */
+renderMap("domain");
+renderMap("eco");
+renderMap("cog");
+renderUpdates();
+setupFilters();
+setupForm();
+populateEntrySelect();
+initCloud();
+route();
+</script>
+</body>
+</html>

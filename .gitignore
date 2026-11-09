@@ -1,0 +1,5 @@
+# 作业要求与项目说明.md 为内部参考文档，保留提交
+.DS_Store
+Thumbs.db
+*.log
+node_modules/
