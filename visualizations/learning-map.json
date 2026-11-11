@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "从识别任务到可核查的学习路径",
+    "output": "archify-map.html",
+    "quality_profile": "showcase",
+    "locale": "zh-CN",
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "frontend": {
+          "label": "领域与任务"
+        },
+        "backend": {
+          "label": "认知与计划"
+        },
+        "external": {
+          "label": "生态与工具"
+        }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "d-task",
+      "type": "frontend",
+      "label": "居家用药识别与防错",
+      "sublabel": "领域地图",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        180,
+        76
+      ]
+    },
+    {
+      "id": "d-ocr",
+      "type": "frontend",
+      "label": "文字识别（OCR）",
+      "sublabel": "领域地图",
+      "pos": [
+        380,
+        40
+      ],
+      "size": [
+        180,
+        76
+      ]
+    },
+    {
+      "id": "e-opencv",
+      "type": "external",
+      "label": "OpenCV",
+      "sublabel": "生态地图",
+      "pos": [
+        720,
+        40
+      ],
+      "size": [
+        180,
+        76
+      ]
+    },
+    {
+      "id": "d-evaluation",
+      "type": "frontend",
+      "label": "识别结果如何评测",
+      "sublabel": "分析计划 · 尚未执行",
+      "pos": [
+        720,
+        280
+      ],
+      "size": [
+        180,
+        76
+      ]
+    },
+    {
+      "id": "c-ocr-plan",
+      "type": "backend",
+      "label": "OCR 拍摄条件对照计划",
+      "sublabel": "分析计划 · 尚未执行",
+      "pos": [
+        380,
+        280
+      ],
+      "size": [
+        180,
+        76
+      ]
+    },
+    {
+      "id": "d-review",
+      "type": "frontend",
+      "label": "识别失败与人工核对",
+      "sublabel": "分析计划 · 尚未执行",
+      "pos": [
+        40,
+        280
+      ],
+      "size": [
+        180,
+        76
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "reading-1",
+      "from": "d-task",
+      "to": "d-ocr",
+      "label": "技术入口"
+    },
+    {
+      "id": "reading-2",
+      "from": "d-ocr",
+      "to": "e-opencv",
+      "label": "工具资料"
+    },
+    {
+      "id": "reading-3",
+      "from": "e-opencv",
+      "to": "d-evaluation",
+      "label": "需要评测"
+    },
+    {
+      "id": "reading-4",
+      "from": "d-evaluation",
+      "to": "c-ocr-plan",
+      "label": "形成计划"
+    },
+    {
+      "id": "reading-5",
+      "from": "c-ocr-plan",
+      "to": "d-review",
+      "label": "检查异常"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "如何阅读",
+      "items": [
+        "箭头是建议阅读顺序",
+        "不表示临床决策或因果链"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "与卡片同步",
+      "items": [
+        "复用同一份节点与关联",
+        "下方索引可回到详细来源"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "计划与事实",
+      "items": [
+        "对照计划尚未执行",
+        "没有生成准确率或试验结果"
+      ]
+    }
+  ]
+}

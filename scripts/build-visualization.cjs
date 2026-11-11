@@ -1,0 +1,8 @@
+// 只使用 Node 标准库，从网站唯一数据来源生成 Archify 图源。
+const fs=require('fs'),vm=require('vm'),path=require('path');
+const root=path.resolve(__dirname,'..');const sandbox={window:{}};vm.createContext(sandbox);vm.runInContext(fs.readFileSync(path.join(root,'data.js'),'utf8'),sandbox);
+const data=sandbox.window.MAP_DATA;const entries=Object.entries(data.maps).flatMap(([map,m])=>m.entries.map(e=>({...e,map})));
+const lookup=id=>entries.find(e=>e.id===id);
+const positions=[[40,40],[380,40],[720,40],[720,280],[380,280],[40,280]];
+const spec={schema_version:1,diagram_type:'architecture',meta:{title:data.visualization.title,output:'archify-map.html',quality_profile:'showcase',locale:'zh-CN',legend:{mode:'auto',entries:{frontend:{label:'领域与任务'},backend:{label:'认知与计划'},external:{label:'生态与工具'}}}},components:data.visualization.nodeIds.map((id,i)=>{const e=lookup(id);if(!e)throw Error('Unknown node '+id);return {id,type:{domain:'frontend',eco:'external',cog:'backend'}[e.map],label:e.name,sublabel:e.status==='计划未执行'?'分析计划 · 尚未执行':data.maps[e.map].name,pos:positions[i],size:[180,76]};}),connections:data.visualization.edges.map((r,i)=>{if(!lookup(r.from).detail.related.some(rel=>rel.id===r.to))throw Error('Graph relation missing from cards '+r.from+' -> '+r.to);return {id:'reading-'+(i+1),from:r.from,to:r.to,label:r.label};}),cards:[{dot:'cyan',title:'如何阅读',items:['箭头是建议阅读顺序','不表示临床决策或因果链']},{dot:'emerald',title:'与卡片同步',items:['复用同一份节点与关联','下方索引可回到详细来源']},{dot:'rose',title:'计划与事实',items:['对照计划尚未执行','没有生成准确率或试验结果']}]};
+fs.mkdirSync(path.join(root,'visualizations'),{recursive:true});fs.writeFileSync(path.join(root,'visualizations','learning-map.json'),JSON.stringify(spec,null,2));console.log('Generated Archify source: 6 nodes, 5 reading links.');

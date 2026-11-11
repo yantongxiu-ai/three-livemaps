@@ -1,0 +1,176 @@
+{
+  "nodeIds": [
+    "d-intro",
+    "d-task",
+    "d-ocr",
+    "d-recognition",
+    "d-data",
+    "d-course",
+    "e-zju",
+    "e-opencv",
+    "e-pytorch",
+    "e-waytoagi",
+    "c-interest",
+    "c-compare",
+    "c-halflife",
+    "c-revision"
+  ],
+  "links": [
+    {
+      "from": "d-intro",
+      "id": "d-task",
+      "reason": "串起全部技术的典型任务"
+    },
+    {
+      "from": "d-intro",
+      "id": "d-ocr",
+      "reason": "识别药瓶标签与说明书文字"
+    },
+    {
+      "from": "d-intro",
+      "id": "d-recognition",
+      "reason": "识别不同药片，防止混淆"
+    },
+    {
+      "from": "d-task",
+      "id": "d-ocr",
+      "reason": "拍照识别依赖文字识别"
+    },
+    {
+      "from": "d-task",
+      "id": "d-recognition",
+      "reason": "防混淆依赖药片图像识别"
+    },
+    {
+      "from": "d-task",
+      "id": "c-revision",
+      "reason": "调研推翻「吃药闹钟」的初判，对应一次认识修正"
+    },
+    {
+      "from": "d-ocr",
+      "id": "d-task",
+      "reason": "拍照识别的技术基础"
+    },
+    {
+      "from": "d-ocr",
+      "id": "d-data",
+      "reason": "需要药瓶标签图像数据来训练和验证"
+    },
+    {
+      "from": "d-ocr",
+      "id": "e-opencv",
+      "reason": "OpenCV 提供图像预处理，辅助文字识别"
+    },
+    {
+      "from": "d-recognition",
+      "id": "d-task",
+      "reason": "防混淆的核心技术"
+    },
+    {
+      "from": "d-recognition",
+      "id": "d-data",
+      "reason": "需要标注不同药片的图像数据"
+    },
+    {
+      "from": "d-recognition",
+      "id": "e-pytorch",
+      "reason": "可用深度学习框架实现图像识别模型"
+    },
+    {
+      "from": "d-data",
+      "id": "d-ocr",
+      "reason": "文字识别需要标签图像数据"
+    },
+    {
+      "from": "d-data",
+      "id": "d-recognition",
+      "reason": "药片识别需要外观标注数据"
+    },
+    {
+      "from": "d-course",
+      "id": "d-ocr",
+      "reason": "OCR 是机器视觉的基础任务"
+    },
+    {
+      "from": "d-course",
+      "id": "e-zju",
+      "reason": "课程来自浙大人工智能学院培养方案"
+    },
+    {
+      "from": "d-course",
+      "id": "c-interest",
+      "reason": "据此制定本组的学习计划"
+    },
+    {
+      "from": "e-zju",
+      "id": "d-course",
+      "reason": "视觉智能等课程来自学院培养方案"
+    },
+    {
+      "from": "e-zju",
+      "id": "d-recognition",
+      "reason": "学院研究为药片识别提供方法支撑"
+    },
+    {
+      "from": "e-zju",
+      "id": "c-interest",
+      "reason": "为本组提供能力与机会的支撑"
+    },
+    {
+      "from": "e-opencv",
+      "id": "d-ocr",
+      "reason": "提供图像预处理，辅助文字识别"
+    },
+    {
+      "from": "e-opencv",
+      "id": "d-recognition",
+      "reason": "提供传统图像处理方法"
+    },
+    {
+      "from": "e-pytorch",
+      "id": "d-recognition",
+      "reason": "用于实现药片识别模型"
+    },
+    {
+      "from": "e-waytoagi",
+      "id": "c-interest",
+      "reason": "为制定学习计划提供资源入口"
+    },
+    {
+      "from": "c-interest",
+      "id": "e-zju",
+      "reason": "课程与研究是「机会」的来源"
+    },
+    {
+      "from": "c-interest",
+      "id": "d-course",
+      "reason": "课程路径是「能力」的来源"
+    },
+    {
+      "from": "c-compare",
+      "id": "d-ocr",
+      "reason": "比较不同 OCR 实现方案"
+    },
+    {
+      "from": "c-compare",
+      "id": "d-recognition",
+      "reason": "比较 API 调用与自训练模型"
+    },
+    {
+      "from": "c-halflife",
+      "id": "d-course",
+      "reason": "培养方案按半衰期组织"
+    },
+    {
+      "from": "c-halflife",
+      "id": "e-waytoagi",
+      "reason": "工具类技能半衰期短，需持续追踪更新"
+    },
+    {
+      "from": "c-revision",
+      "id": "d-task",
+      "reason": "修正后的判断直接体现在典型任务里"
+    }
+  ],
+  "historyHash": "4aa4c1ff013a2b73fae377d376f8e9b54016659e1ba2c6a82b544197f8c6fda0"
+}
