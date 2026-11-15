@@ -1,0 +1,60 @@
+/* Theme layer: warm paper, pharmacy labels, and an original SVG illustration. */
+:root{--bg:#f7f5ed;--surface:#fffef9;--text:#263f34;--text-2:#556552;--text-3:#65725e;--border:#dbdfd1;--domain:#32634f;--eco:#375f77;--cog:#995333;--radius:12px}
+body{background:var(--bg);font-family:"Microsoft YaHei","PingFang SC",system-ui,sans-serif;font-size:15px}
+body::before{content:"";position:fixed;left:0;top:0;bottom:0;width:7px;background:repeating-linear-gradient(180deg,#315c48 0 90px,#b96649 90px 122px,#d6bc90 122px 160px);z-index:101}
+.topbar{background:#f7f5edf5;border-bottom:1px solid #d7ddcd}
+.topbar-inner{max-width:1340px;padding:18px 32px;gap:20px}
+.brand{display:flex;gap:11px;align-items:center;text-decoration:none;color:var(--text);font-size:21px;letter-spacing:1px;white-space:nowrap}
+.brand small{letter-spacing:.4px;font-size:10px;font-weight:400;color:var(--text-2)}
+.brand-mark{display:grid;place-items:center;width:41px;height:45px;border:1px solid #32634f;border-radius:14px 14px 8px 8px;background:#e4ebdc;color:#32634f;font-size:35px;font-weight:400;line-height:1}
+nav button{border-radius:7px;font-size:13px;padding:9px 10px;min-height:40px}
+nav button[aria-current=true]{background:#2f5845;border-color:#2f5845;color:#fffdf5}
+main{max-width:1280px;padding:46px 32px 85px}
+h1{font-family:"Songti SC","STSong","SimSun",serif;letter-spacing:0;line-height:1.5;font-weight:700;font-size:33px}
+h2{font-size:21px}a{color:#2c604a}
+.eyebrow{color:#69745d;font-size:11px;letter-spacing:2px;margin-bottom:24px}
+.home-hero{display:grid;grid-template-columns:1.15fr 1fr;align-items:center;gap:32px;position:relative;padding:6px 0 13px}
+#view-home h1{font-size:clamp(34px,3.35vw,49px);line-height:1.5;margin:0 0 16px;letter-spacing:1px;max-width:none}
+#view-home h1 span{color:#ab5b40;position:relative;white-space:nowrap}
+.hero-sub{font-size:18px;margin-bottom:20px;color:#50644e}
+.hero-copy>.lead{font-size:14px;line-height:2;max-width:520px}
+.hero-actions{display:flex;gap:22px;align-items:center;margin:27px 0 25px;flex-wrap:wrap}
+.primary-btn{display:inline-flex;gap:25px;align-items:center;justify-content:center;color:#fffdf5;text-decoration:none;background:#2f5845;border:1px solid #2f5845;border-radius:7px;font-size:14px;min-height:46px;padding:9px 20px}
+.primary-btn:hover{background:#234834;color:#fff}
+.secondary-link{font-size:13px;text-decoration:none;border-bottom:1px solid #b6c3ae;padding:5px 0}
+.hero-caption{font-size:11px;color:#66725f;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.hero-caption span{font-size:10px;background:#e8eadc;border-radius:4px;padding:2px 8px}
+.medicine-scene{margin:0;position:relative;align-self:center}
+.medicine-scene svg{display:block;width:100%;height:auto}
+.medicine-scene figcaption{font-size:11px;text-align:center;color:#65725e;margin-top:1px}
+.hero-facts{margin:27px 0 24px;border-top:1px solid #ced6c2;border-bottom:1px solid #ced6c2;padding:14px 0;font-size:12px}
+.hero-facts span{border:0;padding:3px 12px 3px 0;border-right:1px solid #cbd4bd;border-radius:0}
+.hero-facts a{color:#995333}
+.entry-row{gap:20px;counter-reset:map-index}
+.entry-card{background:var(--surface);border:1px solid #d8ddcd;border-top:1px solid #d8ddcd!important;border-radius:10px;padding:24px;min-height:221px;position:relative;overflow:hidden;counter-increment:map-index}
+.entry-card::before{content:"0" counter(map-index);position:absolute;top:11px;right:18px;font-family:Georgia,serif;font-size:51px;color:#e4e9db;font-style:italic}
+.entry-card::after{content:"翻阅地图 ↗";display:block;margin-top:18px;border-top:1px dashed #d4dac8;padding-top:12px;font-size:12px;color:var(--domain)}
+.entry-card:nth-child(2)::after{color:var(--eco)}.entry-card:nth-child(3)::after{color:var(--cog)}
+.entry-card h3{font-size:21px;margin:12px 0 10px;position:relative}
+.entry-card p{font-size:13px;color:var(--text-2);line-height:1.9;max-width:95%}
+.entry-card:hover,.card:hover{box-shadow:0 9px 26px #36452e0c;transform:translateY(-2px);border-color:#a9ba9d}
+.tag{border-radius:4px;font-size:11px}.tag.c-domain{background:#e4ecde;color:#32634f}.tag.c-eco{background:#e4ebee;color:#375f77}.tag.c-cog{background:#f3e7dc;color:#995333}
+.tagline-box{background:#e9ecdf;border:1px solid #d5ddc9;border-left:3px solid #8da383;border-radius:5px;margin-top:26px;padding:18px 22px}
+#view-domain>h1::before,#view-eco>h1::before,#view-cog>h1::before{display:block;font:11px/1.5 system-ui;letter-spacing:3px;color:#74826a;margin-bottom:14px}
+#view-domain>h1::before{content:"01 / 识别的知识"}#view-eco>h1::before{content:"02 / 可用的资源"}#view-cog>h1::before{content:"03 / 判断的依据"}
+.map-controls{padding:16px;background:#eeeee3;border:1px solid var(--border);border-radius:9px;margin-top:26px}
+.map-controls input,.map-controls select{background:#fffef9;min-height:45px;border-color:#cbd4bf}
+.cat-title{display:flex;align-items:center;gap:10px;font-size:14px;margin:30px 0 16px}.cat-title::before{content:"";width:7px;height:7px;background:#a9ba98;border-radius:50%}
+.card{background:var(--surface);padding:22px;border-radius:9px;position:relative;min-height:210px}
+.card .name{font-size:17px;line-height:1.7;max-width:95%}.card .brief{font-size:13px;line-height:1.9;margin-bottom:25px}.card .foot{padding-top:11px;border-top:1px dashed #dce0d1}
+.card .foot span{line-height:1.7}.card .status{font-size:11px}
+.panel-head{background:#edf0e5}.panel-body{background:var(--surface)}.panel-body h3{color:#526a48;letter-spacing:.6px}
+.rel-item{background:#f0f1e7;border:1px solid #e0e4d7;border-radius:6px}.rel-item:hover{background:#e8eddf}
+.evidence-note{background:#f3e9d9;color:#795537;font-size:13px;border-left:2px solid #c28b5b;border-radius:4px}
+.source-row .muted{color:#5d6c56}.update-card{background:var(--surface)}.update-head .v{color:#995333}.fb-form,.fb-item{background:var(--surface)}
+footer{border-top:1px solid #d5ddc8;margin-top:30px;background:#eef0e5}
+:focus-visible{outline:3px solid #b46b3f;outline-offset:4px}
+@media(max-width:1120px){.topbar-inner{flex-wrap:wrap}nav{width:100%;justify-content:flex-start}.home-hero{gap:15px}.hero-actions{gap:15px}#view-home h1{font-size:36px}}
+@media(max-width:760px){body::before{width:4px}.topbar-inner{padding:15px 20px;gap:14px}.brand{font-size:20px}.brand-mark{width:35px;height:39px;font-size:30px}.brand small{font-size:10px}nav{gap:4px}nav button{font-size:12px;padding:7px 9px;min-height:38px}main{padding:29px 20px 55px}.home-hero{grid-template-columns:1fr;gap:22px;padding:0}#view-home h1{font-size:clamp(28px,7.9vw,39px);letter-spacing:0;line-height:1.55}.eyebrow{font-size:10px;letter-spacing:1px;margin-bottom:20px}.hero-sub{font-size:16px}.hero-copy>.lead{font-size:14px}.hero-actions{margin:22px 0;gap:20px}.primary-btn{font-size:13px;padding:10px 15px;gap:15px}.hero-caption{font-size:10px;gap:8px}.medicine-scene{max-width:490px;width:100%;margin:0 auto}.medicine-scene figcaption{font-size:10px}.hero-facts{margin:24px 0 20px}.hero-facts span{font-size:11px;border:0}.entry-card{min-height:0;padding:23px}.entry-card p{max-width:none}.entry-card::before{font-size:48px}.tagline-box{padding:15px}.map-controls{padding:12px}.card{min-height:205px}h1{font-size:28px}.panel-body{padding:20px}.panel-head{padding:16px 20px}}
+/* Keep all category tokens consistent with the fieldnotes theme. */
+:root{--domain-bg:#e4ecde;--eco-bg:#e4ebee;--cog-bg:#f3e7dc;--surface-2:#f0f1e7;--info:#375f77;--info-bg:#e4ebee;--warn:#895638;--warn-bg:#f3e7dc}

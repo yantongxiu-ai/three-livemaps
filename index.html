@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>三张活地图 · 老年人用药安全</title>
+<title>安心识药 · 三张活地图 · 老年人用药安全</title>
+<meta name="description" content="围绕老年人用药安全，连接机器视觉知识、工具资源与学习思考。浙江大学人工智能课程小组的三张活地图。">
+<meta name="theme-color" content="#2f5845">
 <style>
   :root{
     --bg:#fbfbfa; --surface:#ffffff; --surface-2:#f5f4f0;
@@ -191,13 +193,15 @@
   .tagline-box{background:var(--surface); border:0.5px solid var(--border); border-radius:var(--radius); padding:16px 20px; margin-top:12px;}
 </style>
 <link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="fieldnotes.css">
+<link rel="stylesheet" href="atlas.css">
 </head>
 <body>
 <h2 class="sr-only">三张活地图学习平台，老年人用药安全主题</h2>
 
 <header class="topbar">
   <div class="topbar-inner">
-    <div class="brand">三张活地图<small>老年人用药安全 · 学习平台</small></div>
+    <a class="brand" href="#home" aria-label="安心识药，回到首页"><span class="brand-mark" aria-hidden="true">✳</span><span>安心识药<small>老年人用药安全 · 三张活地图</small></span></a>
     <nav id="nav" aria-label="主导航">
       <button data-view="home" aria-current="true">首页</button>
       <button data-view="domain">领域地图</button>
@@ -213,10 +217,45 @@
 <main>
   <!-- 首页 -->
   <section id="view-home" class="view active">
-    <div class="eyebrow">ZJU · AI LEARNING FIELDNOTES</div><h1>让识别结果，成为可核查的知识。</h1><p class="hero-sub">老年人用药安全 · 三张活地图</p>
-    <p class="lead"><strong>选题</strong>：本小组选题为「老年人用药安全与健康管理场景」，旨在通过实地调研发现老年人在日常吃药中面临的最大痛点（如忘记吃药、看不清说明书、吃错药等），并利用机器视觉技术设计一套智能用药提醒与识别系统。</p>
-    <p class="lead">三张地图各回答一组问题：<strong>领域地图</strong>——有哪些问题、需要学会什么；<strong>生态地图</strong>——谁在解决、还有哪些可能；<strong>认知地图</strong>——怎样理解、比较和检验。</p>
-    <p class="lead">核心理念：在真实探索中<strong>发展</strong>兴趣、形成更有依据的判断——不要急着找到兴趣，要学会发展兴趣。</p>
+    <div class="home-hero">
+      <div class="hero-copy"><div class="eyebrow">居家用药 · 机器视觉学习档案 / 008</div>
+        <h1>看清一张标签，<br>多一分<span>理解与核对。</span></h1>
+        <p class="hero-sub">从机器的「看见」，走向人的「看懂」。</p>
+        <p class="lead">围绕老年人用药安全，记录文字识别、药片外观分类与适老交互中的问题、资料和思考。把每一步判断，连回可以核查的依据。</p>
+        <div class="hero-actions"><a class="primary-btn" href="#visual" data-goto="visual">沿着地图探索 <span aria-hidden="true">↗</span></a><a class="secondary-link" href="#domain" data-goto="domain">翻阅知识卡片 →</a></div>
+        <p class="hero-caption">浙江大学 · 人工智能课程小组项目 <span>学习与研究记录</span></p>
+      </div>
+      <figure class="medicine-scene">
+        <svg viewBox="0 0 500 430" role="img" aria-labelledby="scene-title scene-desc" xmlns="http://www.w3.org/2000/svg">
+          <title id="scene-title">一张药品示意标签的识别与核对</title><desc id="scene-desc">示意药瓶、文字采集框与人工核对便笺，表达本项目的研究主题。没有真实处方或服用信息。</desc>
+          <defs><pattern id="scene-grid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#b7c5b4" opacity=".45"/></pattern></defs>
+          <rect x="6" y="8" width="488" height="408" rx="28" fill="#e8eddf"/>
+          <rect x="6" y="8" width="488" height="408" rx="28" fill="url(#scene-grid)"/>
+          <circle cx="245" cy="218" r="145" fill="#f8f7ec"/><ellipse cx="250" cy="367" rx="179" ry="17" fill="#cdd7c6"/>
+          <g transform="rotate(-8 210 230)"><rect x="120" y="101" width="164" height="252" rx="35" fill="#cfdfcd" stroke="#2c5845" stroke-width="2"/>
+            <rect x="133" y="69" width="138" height="57" rx="12" fill="#2c5845"/>
+            <path d="M150 80v33m17-33v33m17-33v33m17-33v33m17-33v33m17-33v33m17-33v33" stroke="#8fab95" stroke-width="3"/>
+            <rect x="130" y="166" width="145" height="137" rx="5" fill="#fffdf5"/>
+            <path d="M144 185h20m-10-10v20" stroke="#b76448" stroke-width="3"/>
+            <text x="145" y="223" fill="#294b3c" font-size="23" font-weight="700">学习样本 A</text>
+            <text x="145" y="247" fill="#657461" font-size="11">示意标签 · 非真实处方</text>
+            <path d="M145 270h92m-92 10h65" stroke="#b1baa6" stroke-width="3"/>
+          </g>
+          <g fill="none" stroke="#b76448" stroke-width="3"><path d="M101 170v-20h20m160 0h20v20M101 292v20h20m160 0h20v-20"/></g>
+          <g transform="rotate(7 365 272)"><rect x="290" y="205" width="160" height="151" rx="9" fill="#fffdf5" stroke="#d1d8c6"/>
+            <rect x="309" y="191" width="73" height="25" rx="4" fill="#d4bc8d" opacity=".85"/>
+            <text x="309" y="246" fill="#294b3c" font-size="17" font-weight="700">核对便笺</text>
+            <g stroke="#6c8d70" stroke-width="2" fill="none"><rect x="310" y="266" width="12" height="12" rx="2"/><path d="m312 271 4 4 6-9"/><rect x="310" y="293" width="12" height="12" rx="2"/></g>
+            <text x="333" y="278" fill="#5c6e58" font-size="14">保留原图</text><text x="333" y="305" fill="#5c6e58" font-size="14">检查输出</text>
+            <path d="M310 329h115" stroke="#dddccc"/>
+          </g>
+          <g><rect x="302" y="84" width="172" height="43" rx="21" fill="#fffdf5" stroke="#d4dacb"/><circle cx="323" cy="105" r="5" fill="#b76448"/><text x="338" y="111" fill="#365442" font-size="13">采集 · 识别 · 核对</text></g>
+          <path d="M410 132q20 27-2 57" stroke="#8ca68b" stroke-width="2" fill="none" stroke-dasharray="5 5"/>
+          <g transform="rotate(-24 99 352)"><rect x="64" y="338" width="70" height="27" rx="14" fill="#fffdf5" stroke="#c4ad82"/><path d="M99 339v25" stroke="#c4ad82"/><path d="M99 339h21a13 13 0 0 1 0 26H99" fill="#d5b98a"/></g>
+          <text x="27" y="393" fill="#61775c" font-size="11" letter-spacing="2">FIELDNOTES / HOME MEDICATION</text>
+        </svg><figcaption>我们研究识别如何帮助核对；每一项能力，都需要证据。</figcaption>
+      </figure>
+    </div>
     <div class="hero-facts"><span id="home-entry-count"></span><span>三图关联 · 原始资料 · 实践计划</span><a href="#visual" data-goto="visual">探索可视化路径 ↗</a></div><div class="entry-row">
       <a class="entry-card" href="#domain" data-goto="domain">
         <span class="tag c-domain">领域地图</span>
@@ -235,7 +274,7 @@
       </a>
     </div>
     <div class="tagline-box">
-      <p style="margin:0 0 6px;"><strong>当前版本</strong>：<span id="home-version">v0.7</span>（选题：老年人用药安全 · 机器视觉用药识别）</p>
+      <p style="margin:0 0 6px;"><strong>当前版本</strong>：<span id="home-version">v0.8</span>（选题：老年人用药安全 · 机器视觉用药识别）</p>
       <p style="margin:0; font-size:13px; color:var(--text-3);">浏览入口：<a href="#updates" data-goto="updates">更新记录</a> · <a href="#feedback" data-goto="feedback">反馈与建议</a>　|　前沿在变，地图跟着长——每周至少检查一次。</p>
     </div>
   </section>
@@ -250,7 +289,7 @@
   <!-- 生态地图 -->
   <section id="view-eco" class="view">
     <h1>生态地图</h1>
-    <p class="lead"><strong>生态地图 = 社会需求与外部机会</strong>，回答「谁在解决？还有哪些可能性？」。下方是相关的学习资源、工具与社区，以及它们和领域知识之间的关系。</p>
+    <p class="lead"><strong>生态地图 = 社会需求与外部机会</strong>，回答「谁在解决？还有哪些可能性？」。当前先梳理学习资源、工具与社区；真实项目、产业参与者与需求方仍待后续补充。</p>
     <div id="eco-list"></div>
   </section>
 
@@ -261,7 +300,17 @@
     <div id="cog-list"></div>
   </section>
 
-  <section id="view-visual" class="view"><div class="eyebrow">RELATION ATLAS</div><h1>把一条学习路径连起来</h1><p class="lead">从任务进入技术、工具与评测，再回到分析和人工核对。图中展示建议阅读顺序，分析计划尚未执行。</p><p><a class="text-link" href="archify-map.html?theme=light" target="_blank" rel="noopener">独立打开 Archify 图 ↗</a></p><iframe id="archify-frame" title="Archify 学习关系总览" data-src="archify-map.html?theme=light" loading="lazy"></iframe><p id="visual-selection" role="status">在图中点选节点，再使用这里的详情入口。</p><h2>按节点回到详细内容</h2><p class="muted">以下条目与图共用同一数据，点击可查看来源、计划状态及更多关联。</p><div id="visual-links" class="grid"></div></section>
+  <section id="view-visual" class="view">
+    <div class="eyebrow">安心识药 / 关系图谱</div><h1>把知识连回生活中的问题。</h1>
+    <p class="lead">选择一条阅读路径，点选节点，查看它连接的知识、工具与思考。连线表示条目之间的参考关系，不表示临床流程或因果。</p>
+    <div id="atlas-root"></div>
+    <details class="archify-alternative"><summary><span>另一种读法</span> Archify · 六步学习流程 <span aria-hidden="true">↗</span></summary>
+      <div class="archify-body"><p class="muted">保留独立的原生 Archify 流程版，采用 editorial 版式。箭头是建议阅读顺序；分析计划尚未执行。</p>
+      <a class="text-link" href="archify-map.html?theme=light" target="_blank" rel="noopener">独立打开 Archify 图 ↗</a>
+      <iframe id="archify-frame" title="Archify 学习关系总览" data-src="archify-map.html?theme=light" loading="lazy"></iframe>
+      <p id="visual-selection" role="status">在图中点选节点，再使用这里的详情入口。</p><div id="visual-links" class="grid"></div></div>
+    </details>
+  </section>
   <!-- 更新记录 -->
   <section id="view-updates" class="view">
     <h1>更新记录</h1>
@@ -338,6 +387,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
 <script src="data.js"></script>
+<script src="atlas.js"></script>
 <script>
 "use strict";
 
@@ -350,7 +400,7 @@ const $$ = (s) => Array.from(document.querySelectorAll(s));
 
 const STATUS_CLASS = {
   "待核实": "b-info", "待阅读": "b-neutral", "待填写": "b-neutral", "已核实": "b-ok",
-  "部分核实": "b-info", "计划未执行": "b-warn", "资料已核对": "b-ok",
+  "部分核实": "b-info", "计划未执行": "b-warn", "资料已核对": "b-ok", "待原记录核对": "b-warn",
   "待处理": "b-warn", "处理中": "b-info", "已处理": "b-ok"
 };
 
@@ -376,7 +426,7 @@ function showView(id){
   $("#view-" + id).classList.add("active");
   $$("nav button").forEach((b) => b.setAttribute("aria-current", b.dataset.view === id ? "true" : "false"));
   if (id === "feedback") loadFeedback();
-  if (id === "visual") { const frame=$("#archify-frame"); if (!frame.getAttribute("src")) frame.src=frame.dataset.src; }
+
 }
 function route(){
   const parts=(location.hash.slice(1)||"home").split("?");
@@ -915,6 +965,10 @@ $("#archify-frame").addEventListener("load", () => {
     };
     doc.addEventListener('click',select);doc.addEventListener('keydown',select);
   } catch { $("#visual-selection").textContent='请用下方节点索引查看详情。'; }
+});
+LiveAtlas.init(DATA);
+$(".archify-alternative").addEventListener("toggle",event=>{
+  if(event.currentTarget.open){const frame=$("#archify-frame");if(!frame.getAttribute('src'))frame.src=frame.dataset.src;}
 });
 renderMap("domain");
 renderMap("eco");
