@@ -1,10 +1,10 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert'),path=require('path'),crypto=require('crypto');const root=path.resolve(__dirname,'..');const ctx={window:{}};vm.createContext(ctx);vm.runInContext(fs.readFileSync(root+'/data.js','utf8'),ctx);const data=ctx.window.MAP_DATA;
-const baseline=JSON.parse(fs.readFileSync(__dirname+'/baseline.json','utf8'));const entries=Object.values(data.maps).flatMap(m=>m.entries);const byId=new Map(entries.map(e=>[e.id,e]));assert.equal(byId.size,entries.length);assert.equal(entries.length,18);
+const baseline=JSON.parse(fs.readFileSync(__dirname+'/baseline.json','utf8'));const entries=Object.values(data.maps).flatMap(m=>m.entries);const byId=new Map(entries.map(e=>[e.id,e]));assert.equal(byId.size,entries.length);assert.equal(entries.length,26);
 for(const id of baseline.nodeIds)assert(byId.has(id),'Missing original node '+id);
 for(const link of baseline.links)assert(byId.get(link.from).detail.related.some(r=>r.id===link.id&&r.reason===link.reason),'Changed original link '+link.from+' -> '+link.id);
 for(const e of entries){for(const r of e.detail.related)assert(byId.has(r.id),'Broken relation '+r.id);for(const id of e.detail.sources||[])assert(data.sources.some(s=>s.id===id),'Broken source '+id);}
 for(const s of data.sources)assert(/^https:\/\//.test(s.url));
-assert.equal(crypto.createHash('sha256').update(JSON.stringify(data.updates.slice(2))).digest('hex'),baseline.historyHash);
+assert.equal(crypto.createHash('sha256').update(JSON.stringify(data.updates.slice(data.updates.findIndex(u=>u.version==='v0.6')))).digest('hex'),baseline.historyHash);
 const html=fs.readFileSync(root+'/index.html','utf8');for(const match of html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g))new vm.Script(match[1]);
 const ai={DATA:data};vm.createContext(ai);vm.runInContext(html.slice(html.indexOf('function entryById('),html.indexOf('/* ===================== 路由'))+html.slice(html.indexOf('function buildAIContext('),html.indexOf('async function askAI(')),ai);
 const ocr=ai.entryById('d-ocr');let context=ai.buildAIContext(ocr.map,ocr.entry);assert(context.includes('深度学习基础'));assert(context.includes('待核实'));assert(context.includes('PaddleOCR'));assert(context.includes('待验证')||context.includes('尚未验证'));

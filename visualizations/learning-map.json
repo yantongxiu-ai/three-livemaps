@@ -6,6 +6,7 @@
     "output": "archify-map.html",
     "quality_profile": "showcase",
     "locale": "zh-CN",
+    "visual_preset": "editorial",
     "legend": {
       "mode": "auto",
       "entries": {
