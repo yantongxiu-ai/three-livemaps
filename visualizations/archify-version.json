@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "renderer": "Archify",
+  "version": "3.3.2",
+  "previousVersion": "3.2.0",
+  "scope": "project-local",
+  "upgradedOn": "2026-11-27",
+  "release": {
+    "tag": "v3.3.2",
+    "commit": "a0199aab7bc1e87821c286f9b297afb8f98894ec",
+    "url": "https://github.com/tt-a1i/archify/releases/tag/v3.3.2"
+  },
+  "evidenceDirectory": "visualizations/v09-check/archify-3.3.2",
+  "licenseFiles": [
+    "ARCHIFY-APACHE-2.0.txt",
+    "ARCHIFY-LICENSE.txt",
+    "ARCHIFY-NOTICE.txt",
+    "ARCHIFY-THIRD-PARTY-NOTICES.md"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "D:\\GPT WORK\\2026-10-19\\github-ai-github\\work\\three-livemaps-source\\visualizations\\learning-map.json",
+    "sha256": "7983b2db63593fb958b76cc5dcd47196a3868de9e57d4fac4465d38d780e7b54",
+    "bytes": 3642
+  },
+  "artifact": {
+    "path": "D:\\GPT WORK\\2026-10-19\\github-ai-github\\work\\three-livemaps-source\\archify-map.html",
+    "sha256": "840fa713b53e71b64b166341449844486360bce8b3b7149e322b7a95975d138f",
+    "bytes": 938039
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "D:\\GPT WORK\\2026-10-19\\github-ai-github\\work\\three-livemaps-source\\visualizations\\v09-check\\archify-3.3.2\\archify-map.finalize.json",
+    "summaryReceipt": "D:\\GPT WORK\\2026-10-19\\github-ai-github\\work\\three-livemaps-source\\visualizations\\v09-check\\archify-3.3.2\\archify-map.finalize-summary.json",
+    "browserCheckReceipt": "D:\\GPT WORK\\2026-10-19\\github-ai-github\\work\\three-livemaps-source\\visualizations\\v09-check\\archify-3.3.2\\archify-map.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.3.2",
+    "availableVersion": "3.3.2",
+    "releaseNotes": null,
+    "checkedAt": "2026-11-27T12:28:39.781Z",
+    "source": "network",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 3060,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

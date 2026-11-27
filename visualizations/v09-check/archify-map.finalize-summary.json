@@ -1,0 +1,54 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "D:\\GPT WORK\\2026-10-19\\github-ai-github\\work\\three-livemaps-source\\visualizations\\learning-map.json",
+    "sha256": "7983b2db63593fb958b76cc5dcd47196a3868de9e57d4fac4465d38d780e7b54",
+    "bytes": 3642
+  },
+  "artifact": {
+    "path": "D:\\GPT WORK\\2026-10-19\\github-ai-github\\work\\three-livemaps-source\\archify-map.html",
+    "sha256": "f42b9cf3cd8c15a5a66b2dda0b5b73852d4bc13eb14cff06231d6ff344dd6aee",
+    "bytes": 818547
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "D:\\GPT WORK\\2026-10-19\\github-ai-github\\work\\three-livemaps-source\\visualizations\\v09-check\\archify-map.finalize.json",
+    "summaryReceipt": "D:\\GPT WORK\\2026-10-19\\github-ai-github\\work\\three-livemaps-source\\visualizations\\v09-check\\archify-map.finalize-summary.json",
+    "browserCheckReceipt": "D:\\GPT WORK\\2026-10-19\\github-ai-github\\work\\three-livemaps-source\\visualizations\\v09-check\\archify-map.browser-check.json"
+  },
+  "update": {
+    "status": "update_available",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.3.2",
+    "releaseNotes": "https://github.com/tt-a1i/archify/releases/tag/v3.3.2",
+    "severity": "normal",
+    "summary": "Includes archify-pr in default installs, adds offline in-page update notices with Agent prompts, speeds slow update checks, and polishes PR diagrams.",
+    "checkedAt": "2026-11-27T11:18:57.304Z",
+    "source": "network",
+    "noticeRequired": true,
+    "noticeText": "Archify update: 3.2.0 → 3.3.2. A newer release is available. Release notes: https://github.com/tt-a1i/archify/releases/tag/v3.3.2. Would you like me to update Archify?",
+    "eventKey": "archify@sha256:932d915f83fdbf44796cc6b20b085455a763491306e1b8dee92047e11dddc0ea"
+  },
+  "visualReview": "not-requested",
+  "durationMs": 3144,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}
