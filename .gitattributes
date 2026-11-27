@@ -1,0 +1,4 @@
+# Preserve the bytes referenced by Archify's validation receipts on Windows.
+/archify-map.html text eol=lf
+/archify-map.delivery.json text eol=lf
+/visualizations/learning-map.json text eol=lf

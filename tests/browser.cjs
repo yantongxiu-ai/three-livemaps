@@ -1,8 +1,9 @@
 // Optional browser QA. Use an isolated browser; never call the real model or write feedback.
-const assert=require('assert'),fs=require('fs'),path=require('path');
+const assert=require('assert'),fs=require('fs'),path=require('path'),vm=require('vm');
+const sandbox={window:{}};vm.runInNewContext(fs.readFileSync(path.resolve(__dirname,'../data.js'),'utf8'),sandbox);const current=sandbox.window.MAP_DATA,expectedCount=Object.values(current.maps).reduce((n,m)=>n+m.entries.length,0);
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
-const output=path.resolve(process.env.QA_OUTPUT||'../../outputs/second-update/screenshots');fs.mkdirSync(output,{recursive:true});
-const url=process.env.QA_URL||'http://127.0.0.1:8769/';
+const output=path.resolve(process.env.QA_OUTPUT||'../../outputs/third-update/regression/screenshots');fs.mkdirSync(output,{recursive:true});
+const url=process.env.QA_URL||'http://127.0.0.1:8770/';
 (async()=>{
  const browser=await chromium.launch({headless:true,...(process.env.QA_BROWSER_CHANNEL?{channel:process.env.QA_BROWSER_CHANNEL}:{})});
  const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'});
@@ -12,10 +13,10 @@ const url=process.env.QA_URL||'http://127.0.0.1:8769/';
  const checks=[];async function check(name,fn){await fn();checks.push(name);}
  try{
  await page.goto(url,{waitUntil:'domcontentloaded'});
- await check('Homepage data count and local version',async()=>{assert.equal(await page.locator('#home-entry-count').textContent(),'26 个学习条目');assert.equal(await page.locator('#home-version').textContent(),'v0.8');assert.equal(await page.getByRole('heading',{name:/看清一张标签/}).count(),1);});
+ await check('Homepage data count and local version',async()=>{assert.equal(await page.locator('#home-entry-count').textContent(),expectedCount+' 个学习条目');assert.equal(await page.locator('#home-version').textContent(),current.updates[0].version);assert.equal(await page.getByRole('heading',{name:/看清一张标签/}).count(),1);});
  await page.screenshot({path:output+'/desktop-home.png',fullPage:true});
  await check('Map search and category filter',async()=>{
-  await page.locator('nav [data-view=domain]').click();await page.getByRole('searchbox',{name:'搜索领域地图',exact:true}).fill('分组');assert.equal(await page.locator('#domain-list .card:visible').count(),1);
+  await page.locator('nav [data-view=domain]').click();await page.getByRole('searchbox',{name:'搜索领域地图',exact:true}).fill('分组');assert.equal(await page.locator('#domain-list .card:visible').count(),2);assert.equal(await page.locator('#domain-list [data-entry=d-test-split]:visible').count(),1);
   await page.getByRole('searchbox',{name:'搜索领域地图',exact:true}).fill('');await page.getByLabel('筛选领域地图分类').selectOption({label:'核心概念'});assert.equal(await page.locator('#domain-list .card:visible').count(),3);
   await page.getByLabel('筛选领域地图分类').selectOption('全部分类');
  });
@@ -32,17 +33,17 @@ const url=process.env.QA_URL||'http://127.0.0.1:8769/';
   for(const id of ['ocr','classification','evidence']){await page.locator(`[data-path=${id}]`).click();assert.equal(await page.locator('.atlas-path[aria-pressed=true]').count(),1);for(const map of ['domain','eco','cog'])assert((await page.locator('.atlas-node.'+map).count())>0);}
  });
  await check('All nodes, global search, empty and recovery',async()=>{
-  await page.getByRole('button',{name:'查看全部节点',exact:true}).click();assert.equal(await page.locator('.atlas-node').count(),26);
+  await page.getByRole('button',{name:'查看全部节点',exact:true}).click();assert.equal(await page.locator('.atlas-node').count(),expectedCount);
   await page.getByRole('searchbox',{name:'搜索可视化地图全部节点'}).fill('zzzz-no-match');assert.equal(await page.locator('.atlas-node').count(),0);await page.locator('.atlas-empty').waitFor();
   await page.getByRole('searchbox',{name:'搜索可视化地图全部节点'}).fill('混淆');assert((await page.locator('.atlas-node').count())>0);
-  await page.getByRole('searchbox',{name:'搜索可视化地图全部节点'}).fill('');assert.equal(await page.locator('.atlas-node').count(),26);
+  await page.getByRole('searchbox',{name:'搜索可视化地图全部节点'}).fill('');assert.equal(await page.locator('.atlas-node').count(),expectedCount);
  });
  await check('Keyboard selection and details',async()=>{
   const button=page.locator('[data-atlas-id=e-wai]');await button.focus();await page.keyboard.press('Enter');assert.equal(await page.locator('.atlas-inspector h2').textContent(),'W3C WAI 适老设计资源');await page.locator('.atlas-detail-link').click();await page.locator('#panel.open').waitFor();assert.equal(await page.locator('#panel-title').textContent(),'生态地图 · W3C WAI 适老设计资源');await page.keyboard.press('Escape');
  });
  await page.locator('nav [data-view=visual]').click();
  await check('Archify lazy load and original graph to card linkage',async()=>{
-  assert.equal(await page.locator('#archify-frame').getAttribute('src'),null);await page.locator('.archify-alternative summary').click();await page.frameLocator('#archify-frame').locator('g[data-node-id=d-ocr]').waitFor();await page.frameLocator('#archify-frame').locator('g[data-node-id=d-ocr]').click();assert((await page.locator('#visual-selection').textContent()).includes('文字识别'));assert.equal(await page.locator('#visual-selection a').getAttribute('href'),'#domain?entry=d-ocr');
+  const id=current.visualization.nodeIds[0],map=Object.keys(current.maps).find(map=>current.maps[map].entries.some(e=>e.id===id));assert.equal(await page.locator('#archify-frame').getAttribute('src'),null);await page.locator('.archify-alternative summary').click();await page.frameLocator('#archify-frame').locator('g[data-node-id="'+id+'"]').waitFor();await page.frameLocator('#archify-frame').locator('g[data-node-id="'+id+'"]').click();assert.equal(await page.locator('#visual-selection a').getAttribute('href'),'#'+map+'?entry='+id);
  });
  await page.frameLocator('#archify-frame').locator('body').press('Escape');
  await page.locator('#archify-frame').screenshot({path:output+'/archify-editorial.png'});
@@ -57,7 +58,7 @@ const url=process.env.QA_URL||'http://127.0.0.1:8769/';
   const board=page.locator('.atlas-board');assert(await board.evaluate(n=>n.scrollWidth>n.clientWidth));await page.locator('[data-atlas-id=c-error-review]').focus();await page.keyboard.press('Enter');assert.equal(await page.locator('.atlas-inspector h2').textContent(),'错误样本复盘计划');assert((await page.locator('.atlas-relation').count())>0);
  });
  await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:output+'/mobile-atlas.png',fullPage:true});
- await check('All 26 graph nodes select correctly and fit their cards',async()=>{
+ await check('All current graph nodes select correctly and fit their cards',async()=>{
   await page.getByRole('button',{name:'查看全部节点',exact:true}).click();
   const ids=await page.locator('.atlas-node').evaluateAll(nodes=>nodes.map(n=>n.dataset.atlasId));
   for(const id of ids){const n=page.locator(`[data-atlas-id="${id}"]`);await n.focus();await page.keyboard.press('Enter');assert.equal(await page.locator('.atlas-node[aria-pressed=true]').getAttribute('data-atlas-id'),id);assert(await n.evaluate(n=>n.scrollHeight<=n.clientHeight+1),'Node text overflows '+id);}

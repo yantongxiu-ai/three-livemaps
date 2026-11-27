@@ -1,17 +1,17 @@
 {
   "schemaVersion": 1,
-  "receiptId": "b07771fb-b0dc-4ebf-82a7-7a4e42cac2c2",
+  "receiptId": "e65e7d9c-b570-46ce-a343-632872cb6b10",
   "status": "current",
   "command": "deliver",
   "type": "architecture",
   "input": "D:\\GPT WORK\\2026-10-19\\github-ai-github\\work\\three-livemaps-source\\visualizations\\learning-map.json",
   "output": "D:\\GPT WORK\\2026-10-19\\github-ai-github\\work\\three-livemaps-source\\archify-map.html",
   "specification": {
-    "sha256": "6175550cfcac0e3d956c0363371528da1ba24329d45fac7ddefd6c041148f130",
-    "bytes": 3181
+    "sha256": "7983b2db63593fb958b76cc5dcd47196a3868de9e57d4fac4465d38d780e7b54",
+    "bytes": 3642
   },
   "artifact": {
-    "sha256": "66d0f2f7bdd440bcb93a0da54dfb605f656bf3b25359ca89310d3f0fb35b83fa",
-    "bytes": 816164
+    "sha256": "840fa713b53e71b64b166341449844486360bce8b3b7149e322b7a95975d138f",
+    "bytes": 938039
   }
 }

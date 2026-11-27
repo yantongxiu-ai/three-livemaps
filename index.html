@@ -195,6 +195,7 @@
 <link rel="stylesheet" href="theme.css">
 <link rel="stylesheet" href="fieldnotes.css">
 <link rel="stylesheet" href="atlas.css">
+<link rel="stylesheet" href="inquiry.css">
 </head>
 <body>
 <h2 class="sr-only">三张活地图学习平台，老年人用药安全主题</h2>
@@ -208,6 +209,7 @@
       <button data-view="eco">生态地图</button>
       <button data-view="cog">认知地图</button>
       <button data-view="visual">可视化地图</button>
+      <button data-view="inquiry">深入追问</button>
       <button data-view="updates">更新记录</button>
       <button data-view="feedback">反馈与建议</button>
     </nav>
@@ -218,7 +220,7 @@
   <!-- 首页 -->
   <section id="view-home" class="view active">
     <div class="home-hero">
-      <div class="hero-copy"><div class="eyebrow">居家用药 · 机器视觉学习档案 / 008</div>
+      <div class="hero-copy"><div class="eyebrow">居家用药 · 机器视觉学习档案 / 009</div>
         <h1>看清一张标签，<br>多一分<span>理解与核对。</span></h1>
         <p class="hero-sub">从机器的「看见」，走向人的「看懂」。</p>
         <p class="lead">围绕老年人用药安全，记录文字识别、药片外观分类与适老交互中的问题、资料和思考。把每一步判断，连回可以核查的依据。</p>
@@ -256,7 +258,7 @@
         </svg><figcaption>我们研究识别如何帮助核对；每一项能力，都需要证据。</figcaption>
       </figure>
     </div>
-    <div class="hero-facts"><span id="home-entry-count"></span><span>三图关联 · 原始资料 · 实践计划</span><a href="#visual" data-goto="visual">探索可视化路径 ↗</a></div><div class="entry-row">
+    <div class="hero-facts"><span id="home-entry-count"></span><span>三图关联 · 原始资料 · 实践计划</span><a href="#visual" data-goto="visual">探索可视化路径 ↗</a></div><div class="deep-feature"><div><div class="eyebrow">本轮深挖 / 从一个错字开始</div><h2>同样只错一字，编号为什么会不同？</h2><p>7个连续追问 · 3类可操作图例 · 从概念走向可复核的检验</p></div><a class="primary-btn" href="#inquiry" data-goto="inquiry">进入深入追问 ↗</a></div><div class="entry-row">
       <a class="entry-card" href="#domain" data-goto="domain">
         <span class="tag c-domain">领域地图</span>
         <h3>领域地图</h3>
@@ -274,7 +276,7 @@
       </a>
     </div>
     <div class="tagline-box">
-      <p style="margin:0 0 6px;"><strong>当前版本</strong>：<span id="home-version">v0.8</span>（选题：老年人用药安全 · 机器视觉用药识别）</p>
+      <p style="margin:0 0 6px;"><strong>当前版本</strong>：<span id="home-version">v0.9</span>（选题：老年人用药安全 · 机器视觉用药识别）</p>
       <p style="margin:0; font-size:13px; color:var(--text-3);">浏览入口：<a href="#updates" data-goto="updates">更新记录</a> · <a href="#feedback" data-goto="feedback">反馈与建议</a>　|　前沿在变，地图跟着长——每周至少检查一次。</p>
     </div>
   </section>
@@ -304,13 +306,14 @@
     <div class="eyebrow">安心识药 / 关系图谱</div><h1>把知识连回生活中的问题。</h1>
     <p class="lead">选择一条阅读路径，点选节点，查看它连接的知识、工具与思考。连线表示条目之间的参考关系，不表示临床流程或因果。</p>
     <div id="atlas-root"></div>
-    <details class="archify-alternative"><summary><span>另一种读法</span> Archify · 六步学习流程 <span aria-hidden="true">↗</span></summary>
+    <details class="archify-alternative"><summary><span>另一种读法</span> Archify · 七问深入路径 <span aria-hidden="true">↗</span></summary>
       <div class="archify-body"><p class="muted">保留独立的原生 Archify 流程版，采用 editorial 版式。箭头是建议阅读顺序；分析计划尚未执行。</p>
       <a class="text-link" href="archify-map.html?theme=light" target="_blank" rel="noopener">独立打开 Archify 图 ↗</a>
       <iframe id="archify-frame" title="Archify 学习关系总览" data-src="archify-map.html?theme=light" loading="lazy"></iframe>
       <p id="visual-selection" role="status">在图中点选节点，再使用这里的详情入口。</p><div id="visual-links" class="grid"></div></div>
     </details>
   </section>
+  <section id="view-inquiry" class="view"><div class="eyebrow">深入追问 / OCR 可靠性</div><h1>标签只错一个字，<br>为什么还不能说识别可靠？</h1><p class="lead inquiry-intro">沿7个连续追问，拆清字符差异、字段匹配、分数与筛选各自回答的问题。图例都是人工构造；最后的评测协议尚未执行。</p><div id="inquiry-root"></div><details class="inquiry-pitch"><summary>答疑前，先用这段话串起整条路径</summary><p id="inquiry-pitch"></p></details></section>
   <!-- 更新记录 -->
   <section id="view-updates" class="view">
     <h1>更新记录</h1>
@@ -388,6 +391,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@tencent-ai/workbuddy-cloud-sdk@dev/lib/index.global.js"></script>
 <script src="data.js"></script>
 <script src="atlas.js"></script>
+<script src="learning-math.js"></script>
+<script src="inquiry.js"></script>
 <script>
 "use strict";
 
@@ -400,7 +405,7 @@ const $$ = (s) => Array.from(document.querySelectorAll(s));
 
 const STATUS_CLASS = {
   "待核实": "b-info", "待阅读": "b-neutral", "待填写": "b-neutral", "已核实": "b-ok",
-  "部分核实": "b-info", "计划未执行": "b-warn", "资料已核对": "b-ok", "待原记录核对": "b-warn",
+  "部分核实": "b-info", "计划未执行": "b-warn", "资料已核对": "b-ok", "待原记录核对": "b-warn", "方法设计": "b-info", "教学推导": "b-info",
   "待处理": "b-warn", "处理中": "b-info", "已处理": "b-ok"
 };
 
@@ -419,7 +424,7 @@ function entryById(id){
 }
 
 /* ===================== 路由 ===================== */
-const VIEW_IDS = ["home","domain","eco","cog","visual","updates","feedback"];
+const VIEW_IDS = ["home","domain","eco","cog","visual","inquiry","updates","feedback"];
 function showView(id){
   if (!VIEW_IDS.includes(id)) id = "home";
   $$(".view").forEach((v) => v.classList.remove("active"));
@@ -560,6 +565,7 @@ function renderDetail(id){
       const info=document.createElement('p');info.className='muted';info.textContent=source.position+' · 资料检查 '+source.checked+'。'+source.scope;row.append(link,info);list.appendChild(row);
     }body.appendChild(list);
   }
+  Inquiry.enrich(body,entry);
   if(entry.learning)body.insertAdjacentHTML('beforeend','<p class="muted">学习状态：'+escapeHtml(entry.learning)+'</p>');
   body.insertAdjacentHTML("beforeend", "<h3>当前理解与尚存问题</h3><p>" + escapeHtml(entry.detail.understanding) + "</p>");
 
@@ -705,6 +711,9 @@ function buildAIContext(map, entry){
     "具体资料：" + (entry.detail.sources || []).map(id=>{const s=(DATA.sources||[]).find(s=>s.id===id);return s?s.title+" "+s.url:"";}).join("；"),
     "核查说明：" + (entry.detail.evidenceNote || "原组内记录，具体依据需核对"),
     "当前理解与尚存问题：" + (entry.detail.understanding || "地图中未提供"),
+    "帮助理解：" + (entry.detail.lesson ? JSON.stringify(entry.detail.lesson) : "无"),
+    "深入追问（含教学假设）：" + (entry.detail.probe ? JSON.stringify(entry.detail.probe) : "无"),
+    "演示性质：网页图例为人工构造或确定性计算，不是模型识别结果或本组实验。",
     "相关条目：" + (relatedText || "无"),
     "地图中的课程信息（具体覆盖以来源为准）：" + courseText
   ].join("\n");
@@ -966,6 +975,7 @@ $("#archify-frame").addEventListener("load", () => {
     doc.addEventListener('click',select);doc.addEventListener('keydown',select);
   } catch { $("#visual-selection").textContent='请用下方节点索引查看详情。'; }
 });
+Inquiry.init(DATA,{open:openDetail});
 LiveAtlas.init(DATA);
 $(".archify-alternative").addEventListener("toggle",event=>{
   if(event.currentTarget.open){const frame=$("#archify-frame");if(!frame.getAttribute('src'))frame.src=frame.dataset.src;}

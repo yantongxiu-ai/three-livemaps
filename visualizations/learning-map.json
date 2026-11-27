@@ -2,7 +2,7 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "从识别任务到可核查的学习路径",
+    "title": "从一个错字到可复核的评测",
     "output": "archify-map.html",
     "quality_profile": "showcase",
     "locale": "zh-CN",
@@ -24,120 +24,140 @@
   },
   "components": [
     {
-      "id": "d-task",
+      "id": "d-text-pipeline",
       "type": "frontend",
-      "label": "居家用药识别与防错",
+      "label": "文字检测与文字识别",
       "sublabel": "领域地图",
       "pos": [
         40,
         40
       ],
       "size": [
-        180,
-        76
+        220,
+        80
       ]
     },
     {
-      "id": "d-ocr",
+      "id": "d-transcription",
       "type": "frontend",
-      "label": "文字识别（OCR）",
+      "label": "先约定转录与计分单位",
       "sublabel": "领域地图",
       "pos": [
-        380,
+        400,
         40
       ],
       "size": [
-        180,
-        76
+        220,
+        80
       ]
     },
     {
-      "id": "e-opencv",
-      "type": "external",
-      "label": "OpenCV",
-      "sublabel": "生态地图",
-      "pos": [
-        720,
-        40
-      ],
-      "size": [
-        180,
-        76
-      ]
-    },
-    {
-      "id": "d-evaluation",
+      "id": "d-cer",
       "type": "frontend",
-      "label": "识别结果如何评测",
-      "sublabel": "分析计划 · 尚未执行",
+      "label": "字符错误率：怎样算一个错字",
+      "sublabel": "领域地图",
       "pos": [
-        720,
-        280
+        760,
+        40
       ],
       "size": [
-        180,
-        76
+        220,
+        80
       ]
     },
     {
-      "id": "c-ocr-plan",
+      "id": "d-field-check",
+      "type": "frontend",
+      "label": "编号字段：完整匹配与缺失",
+      "sublabel": "领域地图",
+      "pos": [
+        760,
+        260
+      ],
+      "size": [
+        220,
+        80
+      ]
+    },
+    {
+      "id": "d-score",
+      "type": "frontend",
+      "label": "识别分数：高分等于更可信吗",
+      "sublabel": "领域地图",
+      "pos": [
+        400,
+        260
+      ],
+      "size": [
+        220,
+        80
+      ]
+    },
+    {
+      "id": "d-abstain",
+      "type": "frontend",
+      "label": "阈值取舍：覆盖了多少，错了多少",
+      "sublabel": "领域地图",
+      "pos": [
+        40,
+        260
+      ],
+      "size": [
+        220,
+        80
+      ]
+    },
+    {
+      "id": "c-ocr-protocol",
       "type": "backend",
-      "label": "OCR 拍摄条件对照计划",
-      "sublabel": "分析计划 · 尚未执行",
-      "pos": [
-        380,
-        280
-      ],
-      "size": [
-        180,
-        76
-      ]
-    },
-    {
-      "id": "d-review",
-      "type": "frontend",
-      "label": "识别失败与人工核对",
+      "label": "可复核的 OCR 小样本评测协议",
       "sublabel": "分析计划 · 尚未执行",
       "pos": [
         40,
-        280
+        480
       ],
       "size": [
-        180,
-        76
+        220,
+        80
       ]
     }
   ],
   "connections": [
     {
       "id": "reading-1",
-      "from": "d-task",
-      "to": "d-ocr",
-      "label": "技术入口"
+      "from": "d-text-pipeline",
+      "to": "d-transcription",
+      "label": "先定规则"
     },
     {
       "id": "reading-2",
-      "from": "d-ocr",
-      "to": "e-opencv",
-      "label": "工具资料"
+      "from": "d-transcription",
+      "to": "d-cer",
+      "label": "计算差异"
     },
     {
       "id": "reading-3",
-      "from": "e-opencv",
-      "to": "d-evaluation",
-      "label": "需要评测"
+      "from": "d-cer",
+      "to": "d-field-check",
+      "label": "检查字段"
     },
     {
       "id": "reading-4",
-      "from": "d-evaluation",
-      "to": "c-ocr-plan",
-      "label": "形成计划"
+      "from": "d-field-check",
+      "to": "d-score",
+      "label": "辨清分数"
     },
     {
       "id": "reading-5",
-      "from": "c-ocr-plan",
-      "to": "d-review",
-      "label": "检查异常"
+      "from": "d-score",
+      "to": "d-abstain",
+      "label": "观察取舍"
+    },
+    {
+      "id": "reading-6",
+      "from": "d-abstain",
+      "to": "c-ocr-protocol",
+      "label": "制定检验"
     }
   ],
   "cards": [

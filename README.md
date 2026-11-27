@@ -29,8 +29,39 @@
 
 https://three-livemaps-78529.app.workbuddy.host/?sharecode=MWQUXJHQ5C
 
+## v0.9 第三轮更新（用户验收通过）
 
-## v0.8 第二次更新（用户验收通过）
+基于用户指定的本地 v0.8 / `6c3db2e`，在 `codex/third-update` 实现。用户已于2026-11-27验收通过并授权提交推送，包含Archify 3.3.2升级。推送前已核对远端无新增提交，PR #2仍未合并；由组长依次合并并发布原网站。
+
+- 34 节点（领域17、生态8、认知9）、128 条有向参考关联、10 项资料。保留 v0.8 的26个ID、87条关联（含原理由）和九条历史记录。
+- 26 个旧节点补充一句话理解、例子、误区与下一步；新节点也使用同样结构。收紧旧原稿中未取得原件的机构/课程与需求表述，不冒充本轮核实。
+- 新增“深入追问”视图：围绕“标签只错一个字，为什么还不能说识别可靠？”连续七问，从检测/识别、转录、CER、字段匹配、分数、阈值到评测协议。每问都有解释、可反驳的追问、回应与来源边界。
+- 三类教学图例放入对应核心节点：漏检/误读切换、逐字符编辑距离与字段反例、阈值与覆盖/保留错误比例。它们是人工构造或确定性计算，没有运行OCR或大模型。
+- 自定义关系图新增深入追问子集；Archify 更新为同一数据源的七问阅读顺序，采用 editorial。已按用户要求在本项目升级至3.3.2，并重新生成和检查本轮成品。
+- 提供空白 `assets/ocr-evaluation-template.csv`。24图/6对象仅是待执行的教学试点评测方案，不是实际采集结果或医疗有效性证据。
+
+### 预览与使用
+
+双击 `index.html` 后进入“深入追问”，或运行 `python -m http.server 8770 --bind 127.0.0.1` 再访问 `http://127.0.0.1:8770/#inquiry`。问题可直接定位，例如 `#inquiry?step=d-field-check`。图例与计算在本地运行；直接打开文件时，Archify iframe 联动可能受浏览器限制，可用其下方索引或独立打开图。
+
+答疑讲解方法见 `docs/深入追问答疑提纲.md`。真实AI解读与共享反馈仍保留原云配置，本轮没有调用或写入，需在原环境另行核查。
+
+### 修改与验证
+
+内容集中在 `data.js`：`detail.lesson` 帮助阅读，`detail.probe` 支持深入追问；`inquiry.nodeIds` 定义顺序，`teaching` 保存明确标记的人工示例。`learning-math.js` 只做编辑距离及阈值计数，`inquiry.js` 负责展示与交互，不维护另一份事实数据。
+
+数据检查：`node tests/verify.cjs`、`node tests/second-update.cjs`、`node tests/third-update.cjs`。后者还验证编辑距离、插入导致CER大于100%、空参照、Unicode码点、无保留项与空白模板。
+
+浏览器检查：`tests/browser.cjs` 检查原有功能，`tests/third-browser.cjs` 检查新增路径与图例。需要自备 Playwright 与浏览器，并可通过 `PLAYWRIGHT_MODULE`、`QA_BROWSER_CHANNEL`、`QA_URL`、`QA_OUTPUT` 指定环境。测试屏蔽生产云SDK，不验证真实模型或共享反馈。
+
+重新生成 Archify 先运行 `node scripts/build-visualization.cjs`，再以新的 `--out-dir` 运行 finalize。版本固定记录见 `visualizations/archify-version.json`：v3.3.2 / a0199aab7bc1e87821c286f9b297afb8f98894ec。当前回执在 `visualizations/v09-check/archify-3.3.2/`；v09-check根目录与v07/v08回执对应升级前成品，不验证当前HTML。
+
+### 部署文件（由组长合并后安排发布）
+
+需一同上传 `index.html`、`data.js`、`theme.css`、`fieldnotes.css`、`atlas.css`、`atlas.js`、`inquiry.css`、`inquiry.js`、`learning-math.js`、`archify-map.html`、`assets/ocr-evaluation-template.csv`，以及 `ARCHIFY-APACHE-2.0.txt`、`ARCHIFY-LICENSE.txt`、`ARCHIFY-NOTICE.txt`、`ARCHIFY-THIRD-PARTY-NOTICES.md` 四份授权与声明文件，保留 `assets/` 层级。不得只替换首页。
+
+
+## v0.8 历史更新（用户验收通过并已推送）
 
 基于已合并的 v0.7（master / bac0e50），在 `codex/second-update` 分支实现。用户已于 2026-11-15 验收通过并授权提交推送；主分支合并与原网站发布由组长安排。
 

@@ -1,5 +1,5 @@
 const fs=require('fs'),vm=require('vm'),assert=require('assert'),path=require('path'),crypto=require('crypto');const root=path.resolve(__dirname,'..');const ctx={window:{}};vm.createContext(ctx);vm.runInContext(fs.readFileSync(root+'/data.js','utf8'),ctx);const data=ctx.window.MAP_DATA;
-const baseline=JSON.parse(fs.readFileSync(__dirname+'/baseline.json','utf8'));const entries=Object.values(data.maps).flatMap(m=>m.entries);const byId=new Map(entries.map(e=>[e.id,e]));assert.equal(byId.size,entries.length);assert.equal(entries.length,26);
+const baseline=JSON.parse(fs.readFileSync(__dirname+'/baseline.json','utf8'));const entries=Object.values(data.maps).flatMap(m=>m.entries);const byId=new Map(entries.map(e=>[e.id,e]));assert.equal(byId.size,entries.length);assert(entries.length>=26);
 for(const id of baseline.nodeIds)assert(byId.has(id),'Missing original node '+id);
 for(const link of baseline.links)assert(byId.get(link.from).detail.related.some(r=>r.id===link.id&&r.reason===link.reason),'Changed original link '+link.from+' -> '+link.id);
 for(const e of entries){for(const r of e.detail.related)assert(byId.has(r.id),'Broken relation '+r.id);for(const id of e.detail.sources||[])assert(data.sources.some(s=>s.id===id),'Broken source '+id);}

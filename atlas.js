@@ -15,7 +15,7 @@ window.LiveAtlas = (() => {
     const layout=el('div','atlas-layout'),board=el('div','atlas-board');board.tabIndex=0;board.setAttribute('role','region');board.setAttribute('aria-label','知识关系图，可滚动浏览；Tab 键选择节点');
     const inspector=el('aside','atlas-inspector');inspector.setAttribute('aria-label','当前节点与关联说明');
     const legend=el('div','atlas-legend');legend.append(el('span','','图内关联'),el('span','','跨图关联'));
-    const help=el('p','atlas-help','点选节点，只显示它的直接关联线。窄屏可在图内横向滑动；下方也有文字关联入口。');
+    const help=el('p','atlas-help','点选节点查看直接关联。图内可上下滚动，窄屏还可横向滑动；旁边或下方有文字关联入口。');
     const scope=el('p','atlas-scope-note','路径仅展示部分条目；切换「全部节点」可查看完整知识库。线条不表示因果，箭头方向与具体理由在关联说明中列出。');
     tools.append(search,allButton,count);layout.append(board,inspector);shell.append(paths,tools,help,layout,legend,scope);root.append(shell);
     const pathButtons=data.paths.map(p=>{const b=el('button','atlas-path');b.type='button';b.dataset.path=p.id;b.append(el('strong','',p.name),el('small','',p.question));b.addEventListener('click',()=>{path=p.id;query='';search.value='';selected=p.ids[0];board.scrollTop=0;board.scrollLeft=0;render();});paths.append(b);return b;});

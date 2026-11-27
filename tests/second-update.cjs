@@ -4,10 +4,10 @@ vm.runInNewContext(fs.readFileSync(root+'/data.js','utf8'),context);
 const d=context.window.MAP_DATA,base=JSON.parse(fs.readFileSync(__dirname+'/second-baseline.json','utf8'));
 const nodes=Object.entries(d.maps).flatMap(([map,m])=>m.entries.map(e=>({...e,map})));
 const ids=new Map(nodes.map(e=>[e.id,e]));
-assert.equal(nodes.length,26);assert.equal(ids.size,nodes.length);
+assert(nodes.length>=26);assert.equal(ids.size,nodes.length);
 for(const id of base.nodeIds)assert(ids.has(id),'Lost v0.7 node '+id);
 for(const r of base.links)assert(ids.get(r.from).detail.related.some(l=>l.id===r.id&&l.reason===r.reason),'Lost v0.7 relation '+r.from+' -> '+r.id);
-assert.equal(crypto.createHash('sha256').update(JSON.stringify(d.updates.slice(1))).digest('hex'),base.historyHash,'Historical updates changed');
+assert.equal(crypto.createHash('sha256').update(JSON.stringify(d.updates.slice(d.updates.findIndex(u=>u.version==='v0.7')))).digest('hex'),base.historyHash,'Historical updates changed');
 const incoming=new Map(nodes.map(e=>[e.id,0]));let relations=0,cross=0;
 for(const e of nodes){
   assert(d.maps[e.map].categories.includes(e.category),'Unknown category');

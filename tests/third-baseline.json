@@ -1,0 +1,468 @@
+{
+  "nodeIds": [
+    "d-intro",
+    "d-task",
+    "d-ocr",
+    "d-recognition",
+    "d-data",
+    "d-course",
+    "d-evaluation",
+    "d-review",
+    "d-capture",
+    "d-text-pipeline",
+    "d-test-split",
+    "d-confusion",
+    "e-zju",
+    "e-opencv",
+    "e-pytorch",
+    "e-waytoagi",
+    "e-paddleocr",
+    "e-sklearn",
+    "e-wai",
+    "c-interest",
+    "c-compare",
+    "c-halflife",
+    "c-revision",
+    "c-ocr-plan",
+    "c-error-review",
+    "c-evidence"
+  ],
+  "links": [
+    {
+      "from": "d-intro",
+      "id": "d-task",
+      "reason": "串起全部技术的典型任务"
+    },
+    {
+      "from": "d-intro",
+      "id": "d-ocr",
+      "reason": "识别药瓶标签与说明书文字"
+    },
+    {
+      "from": "d-intro",
+      "id": "d-recognition",
+      "reason": "识别不同药片，防止混淆"
+    },
+    {
+      "from": "d-task",
+      "id": "d-ocr",
+      "reason": "拍照识别依赖文字识别"
+    },
+    {
+      "from": "d-task",
+      "id": "d-recognition",
+      "reason": "防混淆依赖药片图像识别"
+    },
+    {
+      "from": "d-task",
+      "id": "c-revision",
+      "reason": "调研推翻「吃药闹钟」的初判，对应一次认识修正"
+    },
+    {
+      "from": "d-task",
+      "id": "d-intro",
+      "reason": "回到选题范围与当前证据边界"
+    },
+    {
+      "from": "d-task",
+      "id": "d-capture",
+      "reason": "明确进入识别前需要的图像记录"
+    },
+    {
+      "from": "d-ocr",
+      "id": "d-task",
+      "reason": "拍照识别的技术基础"
+    },
+    {
+      "from": "d-ocr",
+      "id": "d-data",
+      "reason": "需要药瓶标签图像数据来训练和验证"
+    },
+    {
+      "from": "d-ocr",
+      "id": "e-opencv",
+      "reason": "OpenCV 提供图像预处理，辅助文字识别"
+    },
+    {
+      "from": "d-ocr",
+      "id": "e-paddleocr",
+      "reason": "候选 OCR 工具与官方资料"
+    },
+    {
+      "from": "d-ocr",
+      "id": "d-evaluation",
+      "reason": "技术输出需要评测"
+    },
+    {
+      "from": "d-ocr",
+      "id": "d-text-pipeline",
+      "reason": "拆开检测与识别两种失败"
+    },
+    {
+      "from": "d-recognition",
+      "id": "d-task",
+      "reason": "防混淆的核心技术"
+    },
+    {
+      "from": "d-recognition",
+      "id": "d-data",
+      "reason": "需要标注不同药片的图像数据"
+    },
+    {
+      "from": "d-recognition",
+      "id": "e-pytorch",
+      "reason": "可用深度学习框架实现图像识别模型"
+    },
+    {
+      "from": "d-recognition",
+      "id": "d-confusion",
+      "reason": "检查哪些外观类别容易混淆"
+    },
+    {
+      "from": "d-data",
+      "id": "d-ocr",
+      "reason": "文字识别需要标签图像数据"
+    },
+    {
+      "from": "d-data",
+      "id": "d-recognition",
+      "reason": "药片识别需要外观标注数据"
+    },
+    {
+      "from": "d-data",
+      "id": "d-test-split",
+      "reason": "在评测前隔离相关样本"
+    },
+    {
+      "from": "d-data",
+      "id": "d-capture",
+      "reason": "约定采集条件与图像编号"
+    },
+    {
+      "from": "d-course",
+      "id": "d-ocr",
+      "reason": "OCR 是机器视觉的基础任务"
+    },
+    {
+      "from": "d-course",
+      "id": "e-zju",
+      "reason": "课程来自浙大人工智能学院培养方案"
+    },
+    {
+      "from": "d-course",
+      "id": "c-interest",
+      "reason": "据此制定本组的学习计划"
+    },
+    {
+      "from": "d-course",
+      "id": "c-halflife",
+      "reason": "选择需要长期积累与短期跟进的知识"
+    },
+    {
+      "from": "d-evaluation",
+      "id": "d-data",
+      "reason": "评测需要明确样本与参照信息"
+    },
+    {
+      "from": "d-evaluation",
+      "id": "c-ocr-plan",
+      "reason": "将评测问题落实为对照计划"
+    },
+    {
+      "from": "d-evaluation",
+      "id": "d-test-split",
+      "reason": "先明确独立测试的分组规则"
+    },
+    {
+      "from": "d-evaluation",
+      "id": "d-confusion",
+      "reason": "分类任务需要细看各类错误"
+    },
+    {
+      "from": "d-review",
+      "id": "d-task",
+      "reason": "为典型任务补充失败时的处理边界"
+    },
+    {
+      "from": "d-review",
+      "id": "c-ocr-plan",
+      "reason": "对照计划需要保留异常与未知结果"
+    },
+    {
+      "from": "d-review",
+      "id": "e-wai",
+      "reason": "用适老与无障碍资料检查核对入口"
+    },
+    {
+      "from": "d-capture",
+      "id": "d-ocr",
+      "reason": "采集结果作为文字识别输入"
+    },
+    {
+      "from": "d-capture",
+      "id": "e-opencv",
+      "reason": "查阅阈值化处理方法"
+    },
+    {
+      "from": "d-capture",
+      "id": "c-ocr-plan",
+      "reason": "在既有对照计划中记录条件"
+    },
+    {
+      "from": "d-text-pipeline",
+      "id": "d-ocr",
+      "reason": "回到 OCR 总体任务"
+    },
+    {
+      "from": "d-text-pipeline",
+      "id": "e-paddleocr",
+      "reason": "查找通用 OCR 流水线用法"
+    },
+    {
+      "from": "d-text-pipeline",
+      "id": "c-error-review",
+      "reason": "将定位失败与字符错误分别复盘"
+    },
+    {
+      "from": "d-test-split",
+      "id": "d-data",
+      "reason": "分组需要明确的对象与标签记录"
+    },
+    {
+      "from": "d-test-split",
+      "id": "e-sklearn",
+      "reason": "查看分组划分工具与约束"
+    },
+    {
+      "from": "d-test-split",
+      "id": "d-evaluation",
+      "reason": "在确定独立测试条件后评测"
+    },
+    {
+      "from": "d-confusion",
+      "id": "d-recognition",
+      "reason": "对应药片外观分类的评测"
+    },
+    {
+      "from": "d-confusion",
+      "id": "e-sklearn",
+      "reason": "查阅 confusion_matrix 的输入与输出"
+    },
+    {
+      "from": "d-confusion",
+      "id": "c-error-review",
+      "reason": "回到具体错误图像解释计数"
+    },
+    {
+      "from": "e-zju",
+      "id": "d-course",
+      "reason": "视觉智能等课程来自学院培养方案"
+    },
+    {
+      "from": "e-zju",
+      "id": "d-recognition",
+      "reason": "学院研究为药片识别提供方法支撑"
+    },
+    {
+      "from": "e-zju",
+      "id": "c-interest",
+      "reason": "为本组提供能力与机会的支撑"
+    },
+    {
+      "from": "e-opencv",
+      "id": "d-ocr",
+      "reason": "提供图像预处理，辅助文字识别"
+    },
+    {
+      "from": "e-opencv",
+      "id": "d-recognition",
+      "reason": "提供传统图像处理方法"
+    },
+    {
+      "from": "e-opencv",
+      "id": "d-evaluation",
+      "reason": "拟通过评测检查预处理是否有益"
+    },
+    {
+      "from": "e-pytorch",
+      "id": "d-recognition",
+      "reason": "用于实现药片识别模型"
+    },
+    {
+      "from": "e-pytorch",
+      "id": "d-data",
+      "reason": "在训练前组织样本与标签"
+    },
+    {
+      "from": "e-waytoagi",
+      "id": "c-interest",
+      "reason": "为制定学习计划提供资源入口"
+    },
+    {
+      "from": "e-waytoagi",
+      "id": "c-evidence",
+      "reason": "社区线索需回到原始资料核对"
+    },
+    {
+      "from": "e-paddleocr",
+      "id": "d-ocr",
+      "reason": "提供 OCR 实现与学习入口"
+    },
+    {
+      "from": "e-paddleocr",
+      "id": "c-compare",
+      "reason": "作为后续技术方案比较的候选"
+    },
+    {
+      "from": "e-paddleocr",
+      "id": "d-text-pipeline",
+      "reason": "按流水线模块阅读 OCR 文档"
+    },
+    {
+      "from": "e-sklearn",
+      "id": "d-test-split",
+      "reason": "核对分组隔离的条件"
+    },
+    {
+      "from": "e-sklearn",
+      "id": "d-confusion",
+      "reason": "核对分类计数的读法"
+    },
+    {
+      "from": "e-sklearn",
+      "id": "c-compare",
+      "reason": "用相同条件比较方案"
+    },
+    {
+      "from": "e-wai",
+      "id": "d-review",
+      "reason": "让核对与重拍入口易于发现"
+    },
+    {
+      "from": "e-wai",
+      "id": "d-task",
+      "reason": "返回老年人居家场景的具体需求"
+    },
+    {
+      "from": "e-wai",
+      "id": "c-evidence",
+      "reason": "区分设计依据与用户测试结果"
+    },
+    {
+      "from": "c-interest",
+      "id": "e-zju",
+      "reason": "课程与研究是「机会」的来源"
+    },
+    {
+      "from": "c-interest",
+      "id": "d-course",
+      "reason": "课程路径是「能力」的来源"
+    },
+    {
+      "from": "c-interest",
+      "id": "d-intro",
+      "reason": "把兴趣判断落回当前任务范围"
+    },
+    {
+      "from": "c-compare",
+      "id": "d-ocr",
+      "reason": "比较不同 OCR 实现方案"
+    },
+    {
+      "from": "c-compare",
+      "id": "d-recognition",
+      "reason": "比较 API 调用与自训练模型"
+    },
+    {
+      "from": "c-compare",
+      "id": "d-evaluation",
+      "reason": "比较方法前约定共同评测条件"
+    },
+    {
+      "from": "c-halflife",
+      "id": "d-course",
+      "reason": "培养方案按半衰期组织"
+    },
+    {
+      "from": "c-halflife",
+      "id": "e-waytoagi",
+      "reason": "工具类技能半衰期短，需持续追踪更新"
+    },
+    {
+      "from": "c-revision",
+      "id": "d-task",
+      "reason": "修正后的判断直接体现在典型任务里"
+    },
+    {
+      "from": "c-revision",
+      "id": "c-evidence",
+      "reason": "给已有认识修正补证据检查入口"
+    },
+    {
+      "from": "c-ocr-plan",
+      "id": "d-evaluation",
+      "reason": "按统一规则检查输出"
+    },
+    {
+      "from": "c-ocr-plan",
+      "id": "e-opencv",
+      "reason": "预处理方法的原始学习资料"
+    },
+    {
+      "from": "c-ocr-plan",
+      "id": "d-review",
+      "reason": "异常与未知必须进入分析"
+    },
+    {
+      "from": "c-ocr-plan",
+      "id": "c-compare",
+      "reason": "把比较方法用于具体问题"
+    },
+    {
+      "from": "c-ocr-plan",
+      "id": "d-capture",
+      "reason": "将拍摄条件落实为可追溯记录"
+    },
+    {
+      "from": "c-ocr-plan",
+      "id": "c-error-review",
+      "reason": "预先约定错误记录格式"
+    },
+    {
+      "from": "c-error-review",
+      "id": "d-text-pipeline",
+      "reason": "先分辨 OCR 失败环节"
+    },
+    {
+      "from": "c-error-review",
+      "id": "d-confusion",
+      "reason": "从类别计数回到具体图像"
+    },
+    {
+      "from": "c-error-review",
+      "id": "d-review",
+      "reason": "记录需要人工核对的异常"
+    },
+    {
+      "from": "c-error-review",
+      "id": "c-evidence",
+      "reason": "检查解释是否有证据"
+    },
+    {
+      "from": "c-evidence",
+      "id": "c-revision",
+      "reason": "认识变化需能追溯原始依据"
+    },
+    {
+      "from": "c-evidence",
+      "id": "c-halflife",
+      "reason": "区分持续有效的方法与变化较快的工具资料"
+    },
+    {
+      "from": "c-evidence",
+      "id": "d-intro",
+      "reason": "回到选题范围检查结论是否过大"
+    }
+  ],
+  "historyHash": "c708421a51860ef10210f26477acd6c7e0d2332254e8164c4a01479ec05c6086"
+}
